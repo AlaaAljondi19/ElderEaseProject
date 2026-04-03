@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElderEase - المؤسسات والمساعدات</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="assets/css/organizations.css" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li><a class="nav-link" href="index.html">الرئيسية</a></li>
+        <li><a class="nav-link" href="help-request.html">طلب مساعدة</a></li>
+        <li><a class="nav-link" href="learn.html">تعلم الخدمات</a></li>
+        <li><a class="nav-link" href="volunteers.html">المتطوعون</a></li>
+        <li><a class="nav-link" href="appointments.html">المواعيد</a></li>
+        <li><a class="nav-link" href="gov-services.html">الخدمات الحكومية</a></li>
+        <li><a class="nav-link active" href="organizations.html">المؤسسات</a></li>
+        <li><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+      </ul>
+      <a href="admin.html" class="nav-link btn-admin"><i class="bi bi-shield-lock ms-1"></i> الإدارة</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h2><i class="bi bi-hospital" style="color:var(--primary)"></i> المؤسسات والمساعدات</h2>
+    <p>قائمة بالمؤسسات التي تقدم دعماً متخصصاً لكبار السن</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="search-row">
+    <input class="search-input" type="text" id="orgSearch" placeholder="ابحث عن مؤسسة..." oninput="searchOrgs()" />
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterOrg(this,'all')">الكل</button>
+    <button class="filter-tab" onclick="filterOrg(this,'health')">صحية</button>
+    <button class="filter-tab" onclick="filterOrg(this,'charity')">خيرية</button>
+    <button class="filter-tab" onclick="filterOrg(this,'retire')">تقاعد ومسنّون</button>
+  </div>
+
+  <!--
+    ============================================================
+    هذه القائمة ثابتة - يمكن ربطها بـ API: GET /api/Organizations
+    أو الإبقاء عليها ثابتة في حال لم تكن هناك قاعدة بيانات لها
+    ============================================================
+  -->
+  <div class="row g-4" id="orgsGrid">
+
+    <div class="col-md-6 col-lg-4" data-type="health">
+      <div class="org-card">
+        <span class="org-type org-health"><i class="bi bi-hospital me-1"></i>صحية</span>
+        <h5>مستشفى الملك حسين</h5>
+        <p>يقدم خدمات طبية متكاملة لكبار السن بأسعار مدعومة مع أطباء متخصصين في طب الشيخوخة.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065300970">06-5300970</a></div>
+        <div class="org-contact-item"><i class="bi bi-geo-alt-fill"></i> عمان - الحسين</div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> السبت - الخميس: 8ص - 8م</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="charity">
+      <div class="org-card">
+        <span class="org-type org-charity"><i class="bi bi-heart-fill me-1"></i>خيرية</span>
+        <h5>جمعية رعاية المسنين</h5>
+        <p>تقدم دعماً اجتماعياً ومالياً وغذائياً لكبار السن المحتاجين وأسرهم في جميع أنحاء المملكة.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065234567">06-5234567</a></div>
+        <div class="org-contact-item"><i class="bi bi-geo-alt-fill"></i> عمان - الجبيهة</div>
+        <div class="org-contact-item"><i class="bi bi-envelope-fill"></i> <a href="mailto:info@eldercare.jo">info@eldercare.jo</a></div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="retire">
+      <div class="org-card">
+        <span class="org-type org-retire"><i class="bi bi-piggy-bank-fill me-1"></i>تقاعد</span>
+        <h5>صندوق التقاعد المدني</h5>
+        <p>إدارة معاشات المتقاعدين المدنيين وتقديم الخدمات المالية والاستفسار عن المستحقات.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065006900">06-5006900</a></div>
+        <div class="org-contact-item"><i class="bi bi-globe"></i> <a href="https://www.psd.gov.jo" target="_blank">www.psd.gov.jo</a></div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> الأحد - الخميس: 8ص - 3م</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="health">
+      <div class="org-card">
+        <span class="org-type org-health"><i class="bi bi-hospital me-1"></i>صحية</span>
+        <h5>عيادات العلاج الطبيعي المتنقلة</h5>
+        <p>جلسات علاج طبيعي وتأهيل للمسنين في منازلهم مع أطباء معتمدين وأجهزة متطورة.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065678900">06-5678900</a></div>
+        <div class="org-contact-item"><i class="bi bi-geo-alt-fill"></i> عمان وضواحيها</div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> يومياً: 8ص - 6م</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="charity">
+      <div class="org-card">
+        <span class="org-type org-charity"><i class="bi bi-heart-fill me-1"></i>خيرية</span>
+        <h5>هيئة تكافل الأردن</h5>
+        <p>برامج دعم غذائي ومالي مستدام للأسر والمسنين المحتاجين بالتنسيق مع الجهات الحكومية.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065100300">06-5100300</a></div>
+        <div class="org-contact-item"><i class="bi bi-globe"></i> <a href="https://www.tkful.jo" target="_blank">www.tkful.jo</a></div>
+        <div class="org-contact-item"><i class="bi bi-envelope-fill"></i> <a href="mailto:info@tkful.jo">info@tkful.jo</a></div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="retire">
+      <div class="org-card">
+        <span class="org-type org-retire"><i class="bi bi-piggy-bank-fill me-1"></i>تقاعد</span>
+        <h5>نادي المتقاعدين الأردني</h5>
+        <p>أنشطة ترفيهية وثقافية واجتماعية ورحلات ترفيهية لكبار السن للتواصل الاجتماعي.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:064642100">06-4642100</a></div>
+        <div class="org-contact-item"><i class="bi bi-geo-alt-fill"></i> عمان - الشميساني</div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> السبت - الخميس: 9ص - 5م</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="health">
+      <div class="org-card">
+        <span class="org-type org-health"><i class="bi bi-hospital me-1"></i>صحية</span>
+        <h5>دار رعاية المسنين الوطني</h5>
+        <p>رعاية متكاملة ليلاً ونهاراً لكبار السن مع فريق طبي وتمريضي متخصص على مدار الساعة.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:064100200">06-4100200</a></div>
+        <div class="org-contact-item"><i class="bi bi-geo-alt-fill"></i> عمان - الرابية</div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> مفتوح 24 ساعة</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="charity">
+      <div class="org-card">
+        <span class="org-type org-charity"><i class="bi bi-heart-fill me-1"></i>خيرية</span>
+        <h5>جمعية الهلال الأحمر الأردني</h5>
+        <p>خدمات طوارئ وإسعاف ودعم إنساني وتوزيع مساعدات لكبار السن في الأزمات والكوارث.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:064773141">06-4773141</a></div>
+        <div class="org-contact-item"><i class="bi bi-globe"></i> <a href="https://www.jrcs.org" target="_blank">www.jrcs.org</a></div>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill" style="color:red;"></i> طوارئ: <a href="tel:911">911</a></div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4" data-type="retire">
+      <div class="org-card">
+        <span class="org-type org-retire"><i class="bi bi-piggy-bank-fill me-1"></i>تقاعد</span>
+        <h5>الضمان الاجتماعي - مكتب المسنين</h5>
+        <p>دعم مخصص لكبار السن غير الممولين بمعاش تقاعدي وبرامج الحماية الاجتماعية للمسنين.</p>
+        <div class="org-contact-item"><i class="bi bi-telephone-fill"></i> <a href="tel:065802040">06-5802040</a></div>
+        <div class="org-contact-item"><i class="bi bi-globe"></i> <a href="https://www.ssc.gov.jo" target="_blank">www.ssc.gov.jo</a></div>
+        <div class="org-contact-item"><i class="bi bi-clock-fill"></i> الأحد - الخميس: 8ص - 3م</div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+</div>
+
+<footer><p>جميع الحقوق محفوظة &copy; 2025 <span>إيلدر إيز</span></p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="assets/js/organizations.js"></script>
+</body>
+</html>

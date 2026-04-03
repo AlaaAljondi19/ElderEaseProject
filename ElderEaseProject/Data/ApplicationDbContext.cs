@@ -14,7 +14,7 @@ namespace ElderEaseProject.Data
        
         public DbSet<Volunteer> Volunteers { get; set; }
         public DbSet<Organization> Organizations { get; set; }
-
+        public DbSet<ContactMessage> ContactMessages { get; set; }
 
     }
 }

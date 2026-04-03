@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderEaseProject.Data;
 using ElderEaseProject.Models;
 
 namespace ElderEaseProject.Controllers
 {
-    public class VolunteersController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class VolunteersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -19,139 +16,25 @@ namespace ElderEaseProject.Controllers
             _context = context;
         }
 
-        // GET: Volunteers
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Volunteer>>> GetVolunteers(string? specialty)
         {
-            return View(await _context.Volunteers.ToListAsync());
-        }
+            var query = _context.Volunteers.AsQueryable();
 
-        // GET: Volunteers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            if (!string.IsNullOrEmpty(specialty))
             {
-                return NotFound();
+                query = query.Where(v => v.Specialization == specialty);
             }
 
-            var volunteer = await _context.Volunteers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (volunteer == null)
-            {
-                return NotFound();
-            }
-
-            return View(volunteer);
+            return await query.ToListAsync();
         }
 
-        // GET: Volunteers/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Volunteers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FullName,Email,PhoneNumber,Specialization,AvailableHoursPerWeek,ExperienceSummary,Address,RegistrationDate")] Volunteer volunteer)
+        public async Task<ActionResult<Volunteer>> PostVolunteer(Volunteer volunteer)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(volunteer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(volunteer);
-        }
-
-        // GET: Volunteers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var volunteer = await _context.Volunteers.FindAsync(id);
-            if (volunteer == null)
-            {
-                return NotFound();
-            }
-            return View(volunteer);
-        }
-
-        // POST: Volunteers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,Email,PhoneNumber,Specialization,AvailableHoursPerWeek,ExperienceSummary,Address,RegistrationDate")] Volunteer volunteer)
-        {
-            if (id != volunteer.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(volunteer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VolunteerExists(volunteer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(volunteer);
-        }
-
-        // GET: Volunteers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var volunteer = await _context.Volunteers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (volunteer == null)
-            {
-                return NotFound();
-            }
-
-            return View(volunteer);
-        }
-
-        // POST: Volunteers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var volunteer = await _context.Volunteers.FindAsync(id);
-            if (volunteer != null)
-            {
-                _context.Volunteers.Remove(volunteer);
-            }
-
+            _context.Volunteers.Add(volunteer);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool VolunteerExists(int id)
-        {
-            return _context.Volunteers.Any(e => e.Id == id);
+            return Ok(volunteer);
         }
     }
 }
