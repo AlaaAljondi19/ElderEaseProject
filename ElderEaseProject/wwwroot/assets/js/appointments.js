@@ -1,111 +1,92 @@
+/* === appointments.js === */
+
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const TYPE_BADGES = { medical:'type-medical', bill:'type-bill', exam:'type-exam', general:'type-general' };
+const TYPE_LABELS = { medical:'طبي', bill:'فاتورة', exam:'فحص', general:'عام' };
+
+// دالة لجلب البيانات عند تحميل الصفحة (أضفتها لضمان ظهور المواعيد من السيرفر)
 document.addEventListener('DOMContentLoaded', () => {
-  fetchAppointments();
+    fetch('/api/Appointments')
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(app => {
+                const d = new Date(app.date);
+                appendApptDOM(app.id, app.title, app.type, d.getDate(), MONTHS[d.getMonth()], formatTime(app.time));
+            });
+            checkEmpty();
+        });
 });
 
-// 1. جلب المواعيد من السيرفر (المهمة 3 - GET)
-async function fetchAppointments() {
-  const listContainer = document.getElementById('appointmentsList');
-  const emptyState = document.getElementById('emptyState');
+function addAppt(e) {
+    e.preventDefault();
+    const title = document.getElementById('apptTitle').value;
+    const type  = document.getElementById('apptType').value;
+    const date  = document.getElementById('apptDate').value;
+    const time  = document.getElementById('apptTime').value;
 
-  try {
-    const response = await fetch('/api/Appointments');
-    const appointments = await response.json();
-
-    if (appointments.length === 0) {
-      listContainer.innerHTML = '';
-      emptyState.classList.remove('d-none');
-      return;
-    }
-
-    emptyState.classList.add('d-none');
-    renderAppointments(appointments);
-  } catch (error) {
-    console.error("خطأ في جلب المواعيد:", error);
-  }
-}
-
-// 2. رسم المواعيد داخل الهيكل الخاص بكِ
-function renderAppointments(appointments) {
-  const listContainer = document.getElementById('appointmentsList');
-  listContainer.innerHTML = '';
-
-  appointments.forEach(app => {
-    // استخراج اليوم والشهر من التاريخ القادم من السيرفر
-    const dateObj = new Date(app.date);
-    const day = dateObj.getDate();
-    const month = dateObj.toLocaleString('ar-EG', { month: 'long' });
-
-    listContainer.innerHTML += `
-      <div class="appt-item" data-id="${app.id}">
-        <div class="appt-date-box">
-          <span class="day">${day}</span>
-          <span class="month">${month}</span>
-        </div>
-        <div class="appt-info">
-          <h6>${app.title}</h6>
-          <div class="appt-meta">
-            <span><i class="bi bi-clock"></i> ${app.time}</span>
-            <span class="type-badge type-${app.type}">${getTypeName(app.type)}</span>
-          </div>
-        </div>
-        <div class="appt-actions">
-          <button class="btn-del" onclick="deleteAppt(this, ${app.id})">
-            <i class="bi bi-trash3"></i> حذف
-          </button>
-        </div>
-      </div>`;
-  });
-}
-
-// 3. إضافة موعد جديد (المهمة 3 - POST)
-async function addAppt(e) {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData);
-
-  try {
-    const response = await fetch('/api/Appointments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    // تفعيل الإرسال للسيرفر (المهمة 3 - POST)
+    fetch('/api/Appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Title: title, Type: type, Date: date, Time: time })
+    })
+    .then(r => r.json())
+    .then(appt => {
+        const d = new Date(appt.date);
+        appendApptDOM(appt.id, appt.title, appt.type, d.getDate(), MONTHS[d.getMonth()], formatTime(appt.time));
+        bootstrap.Modal.getInstance(document.getElementById('addApptModal')).hide();
+        document.getElementById('apptForm').reset();
+        checkEmpty();
     });
-
-    if (response.ok) {
-      // إغلاق المودال وتنظيف النموذج وتحديث القائمة
-      const modal = bootstrap.Modal.getInstance(document.getElementById('addApptModal'));
-      modal.hide();
-      e.target.reset();
-      fetchAppointments();
-    }
-  } catch (error) {
-    alert("حدث خطأ أثناء حفظ الموعد");
-  }
 }
 
-// 4. حذف موعد (المهمة 3 - DELETE)
-async function deleteAppt(btn, id) {
-  if (confirm('هل أنتِ متأكدة من حذف هذا الموعد؟')) {
-    try {
-      const response = await fetch(`/api/Appointments/${id}`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
-        // حذف العنصر من الواجهة مباشرة بأسلوبك الأصلي
-        const item = btn.closest('.appt-item');
-        item.style.opacity = '0';
-        setTimeout(() => {
-          fetchAppointments(); // تحديث الحالة للتأكد من القائمة فارغة أم لا
-        }, 300);
-      }
-    } catch (error) {
-      alert("حدث خطأ أثناء الحذف");
-    }
-  }
+function appendApptDOM(id, title, type, day, month, timeStr) {
+    const badgeClass = TYPE_BADGES[type] || 'type-general';
+    const badgeLabel = TYPE_LABELS[type] || 'عام';
+    const div = document.createElement('div');
+    div.className = 'appt-item';
+    if (id) div.dataset.id = id; // تخزين الـ ID القادم من السيرفر
+    div.innerHTML = `
+      <div class="appt-date-box"><span class="day">${day}</span><span class="month">${month}</span></div>
+      <div class="appt-info">
+        <h6>${title}</h6>
+        <div class="appt-meta">
+          <span><i class="bi bi-clock"></i> ${timeStr}</span>
+          <span class="type-badge ${badgeClass}">${badgeLabel}</span>
+        </div>
+      </div>
+      <div class="appt-actions">
+        <button class="btn-del" onclick="deleteAppt(this)"><i class="bi bi-trash3"></i> حذف</button>
+      </div>`;
+    document.getElementById('appointmentsList').prepend(div);
 }
 
-// دالة مساعدة لتحويل الكود لنص عربي داخل الـ Badge
-function getTypeName(type) {
-  const types = { medical: 'طبي', bill: 'فاتورة', exam: 'فحص', general: 'عام' };
-  return types[type] || 'عام';
+function deleteAppt(btn) {
+    const item = btn.closest('.appt-item');
+    const id = item.dataset.id;
+    if (!confirm('هل تريد حذف هذا الموعد؟')) return;
+
+    // تفعيل الحذف من السيرفر (المهمة 3 - DELETE)
+    if (id) {
+        fetch('/api/Appointments/' + id, { method: 'DELETE' })
+            .then(r => {
+                if(r.ok) {
+                    item.style.opacity = '0';
+                    item.style.transition = 'opacity .3s';
+                    setTimeout(() => { item.remove(); checkEmpty(); }, 300);
+                }
+            });
+    }
+}
+
+function checkEmpty() {
+    const hasItems = document.querySelectorAll('#appointmentsList .appt-item').length > 0;
+    document.getElementById('emptyState').classList.toggle('d-none', hasItems);
+}
+
+function formatTime(t) {
+    if(!t) return '';
+    const [h, m] = t.split(':');
+    const hr = parseInt(h);
+    return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'مساءً' : 'صباحاً'}`;
 }
