@@ -9,12 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./assets/css/admin.css?v=1.6" />
     <style>
-        /* إضافة بسيطة لضمان عمل الـ Tabs بشكل صحيح */
         .section { display: none; }
         .section.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1040; display: none; }
-        .overlay.active { display: block; }
+        .overlay.show { display: block; }
+        .sidebar.open { transform: translateX(0); }
     </style>
 </head>
 <body>
@@ -39,18 +39,8 @@
             <a href="#" class="sidebar-link" onclick="showSection('volunteers', this, event)">
                 <i class="bi bi-people-fill"></i> المتطوعون
             </a>
-            <a href="#" class="sidebar-link" onclick="showSection('users', this, event)">
-                <i class="bi bi-person-circle"></i> المستخدمون
-            </a>
-            <a href="#" class="sidebar-link" onclick="showSection('organizations', this, event)">
-                <i class="bi bi-hospital"></i> المؤسسات
-            </a>
             <a href="#" class="sidebar-link" onclick="showSection('messages', this, event)">
                 <i class="bi bi-envelope-fill"></i> الرسائل
-            </a>
-            <div class="sidebar-section">الإعدادات</div>
-            <a href="#" class="sidebar-link" onclick="showSection('settings', this, event)">
-                <i class="bi bi-gear-fill"></i> إعدادات الموقع
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -76,7 +66,7 @@
                     <div class="col-6 col-md-3">
                         <div class="stat-card">
                             <div class="stat-icon orange"><i class="bi bi-people"></i></div>
-                            <div class="stat-info"><div class="num" id="totalUsersStat">247</div><div class="label">مستخدم</div></div>
+                            <div class="stat-info"><div class="num" id="totalStats">0</div><div class="label">إجمالي العمليات</div></div>
                         </div>
                     </div>
                 </div>
@@ -84,21 +74,10 @@
 
             <div class="section" id="section-requests">
                 <div class="table-card">
-                    <div class="card-head">
-                        <h6>طلبات المساعدة الواردة</h6>
-                        <button class="btn-primary-sm" onclick="fetchRequests()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
-                    </div>
+                    <div class="card-head"><h6>طلبات المساعدة</h6></div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>الاسم</th>
-                                    <th>النوع</th>
-                                    <th>الحالة</th>
-                                    <th>إجراء</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>الاسم</th><th>النوع</th><th>الحالة</th><th>إجراء</th></tr></thead>
                             <tbody id="requestsTableBody"></tbody>
                         </table>
                     </div>
@@ -107,35 +86,27 @@
 
             <div class="section" id="section-volunteers">
                 <div class="table-card">
-                    <div class="card-head">
-                        <h6>إدارة المتطوعين</h6>
-                        <select class="form-select form-select-sm w-auto" id="volFilter">
-                            <option value="">كل التخصصات</option>
-                            <option value="medical">طبية</option>
-                            <option value="social">اجتماعية</option>
-                        </select>
-                    </div>
+                    <div class="card-head"><h6>إدارة المتطوعين</h6></div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>الاسم</th>
-                                    <th>التخصص</th>
-                                    <th>الحالة</th>
-                                    <th>إجراء</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>الاسم</th><th>التخصص</th><th>الحالة</th><th>إجراء</th></tr></thead>
                             <tbody id="volunteersTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <div class="section" id="section-users"><div class="p-4 text-center text-muted">قائمة المستخدمين قيد التطوير...</div></div>
-            <div class="section" id="section-organizations"><div class="p-4 text-center text-muted">إدارة المؤسسات قيد التطوير...</div></div>
-            <div class="section" id="section-messages"><div class="p-4 text-center text-muted">الرسائل الواردة قيد التطوير...</div></div>
-            <div class="section" id="section-settings"><div class="p-4 text-center text-muted">إعدادات النظام قيد التطوير...</div></div>
-
+            <div class="section" id="section-messages">
+                <div class="table-card">
+                    <div class="card-head"><h6>الرسائل الواردة</h6></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>#</th><th>المرسل</th><th>الموضوع</th><th>الرسالة</th><th>إجراء</th></tr></thead>
+                            <tbody id="messagesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
