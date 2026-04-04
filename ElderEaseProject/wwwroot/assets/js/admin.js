@@ -1,14 +1,11 @@
 /* === assets/js/admin.js === */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // تحديث الأرقام في لوحة التحكم عند البداية
     updateDashboardCounts();
 });
 
-// 1. التنقل بين الأقسام (تعديل المهام 1 و 6)
 function showSection(id, btn, e) {
     if (e) e.preventDefault();
-    
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
     
@@ -16,15 +13,9 @@ function showSection(id, btn, e) {
     if (el) el.classList.add('active');
     if (btn) btn.classList.add('active');
     
-    const titles = {
-        dashboard: 'لوحة التحكم', 
-        requests: 'طلبات المساعدة', 
-        volunteers: 'المتطوعون',
-        messages: 'الرسائل الواردة'
-    };
+    const titles = {dashboard:'لوحة التحكم', requests:'طلبات المساعدة', volunteers:'المتطوعون', messages:'الرسائل'};
     document.getElementById('pageTitle').textContent = titles[id] || 'لوحة الإدارة';
 
-    // جلب البيانات ديناميكياً عند فتح القسم
     if (id === 'requests') fetchRequests();
     if (id === 'volunteers') fetchVolunteers();
     if (id === 'messages') fetchMessages();
@@ -32,110 +23,83 @@ function showSection(id, btn, e) {
     if (window.innerWidth <= 992) toggleMenu();
 }
 
-// 2. جلب طلبات المساعدة (المهمة 6)
 async function fetchRequests() {
     const tbody = document.getElementById('requestsTableBody');
-    const reqCountBadge = document.getElementById('reqCount');
-    
     try {
-        const response = await fetch('/api/Requests');
-        const data = await response.json();
-        
-        if (reqCountBadge) reqCountBadge.textContent = data.length;
+        const res = await fetch('/api/Requests');
+        const data = await res.json();
+        document.getElementById('reqCount').textContent = data.length;
         tbody.innerHTML = '';
-        
         data.forEach((req, i) => {
-            const statusClass = req.status === 'Completed' ? 's-done' : 's-pending';
-            const statusText = req.status === 'Completed' ? 'مكتمل' : 'قيد الانتظار';
-
             tbody.innerHTML += `
                 <tr>
-                    <td>${i + 1}</td>
-                    <td><strong>${req.fullName}</strong></td>
+                    <td>${i+1}</td>
+                    <td>${req.fullName}</td>
                     <td>${req.requestType}</td>
-                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <button class="btn-tbl text-success" title="اعتماد" onclick="updateRequestStatus(${req.id})"><i class="bi bi-check-circle"></i></button>
-                            <button class="btn-tbl text-danger" title="حذف" onclick="deleteItem('Requests', ${req.id})"><i class="bi bi-trash"></i></button>
-                        </div>
-                    </td>
+                    <td><span class="status-badge ${req.status === 'Completed' ? 's-done' : 's-pending'}">${req.status}</span></td>
+                    <td><button class="btn-tbl text-danger" onclick="deleteItem('Requests', ${req.id})"><i class="bi bi-trash"></i></button></td>
                 </tr>`;
         });
-    } catch (err) { 
-        console.error("Error fetching requests", err);
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">خطأ في جلب البيانات</td></tr>';
-    }
+    } catch (err) { console.error(err); }
 }
 
-// 3. جلب وفلترة المتطوعين (المهمة 1 و 2)
 async function fetchVolunteers() {
-    try {
-        const response = await fetch('/api/Volunteers');
-        const data = await response.json();
-        renderVolunteers(data);
-    } catch (err) { console.error("Error fetching volunteers", err); }
-}
-
-function renderVolunteers(data) {
     const tbody = document.getElementById('volunteersTableBody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = '';
-    data.forEach(v => {
-        tbody.innerHTML += `
-            <tr>
-                <td>
-                   <div class="d-flex align-items-center gap-2">
-                      <div class="admin-avatar" style="width:30px; height:30px; font-size:12px;">${v.name[0]}</div>
-                      ${v.name}
-                   </div>
-                </td>
-                <td>${v.specialty || v.specialization}</td>
-                <td><span class="status-badge s-active">نشط</span></td>
-                <td>
-                    <button class="btn-tbl text-primary" onclick="editVolunteer(${v.id})">تعديل</button>
-                    <button class="btn-tbl text-danger" onclick="deleteItem('Volunteers', ${v.id})"><i class="bi bi-x-circle"></i></button>
-                </td>
-            </tr>`;
-    });
+    try {
+        const res = await fetch('/api/Volunteers');
+        const data = await res.json();
+        tbody.innerHTML = '';
+        data.forEach(v => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${v.name}</td>
+                    <td>${v.specialty || v.specialization}</td>
+                    <td><span class="status-badge s-active">نشط</span></td>
+                    <td><button class="btn-tbl text-danger" onclick="deleteItem('Volunteers', ${v.id})"><i class="bi bi-trash"></i></button></td>
+                </tr>`;
+        });
+    } catch (err) { console.error(err); }
 }
 
-// 4. حذف عنصر (المهمة 8 - CRUD)
+async function fetchMessages() {
+    const tbody = document.getElementById('messagesTableBody');
+    try {
+        const res = await fetch('/api/Contact');
+        const data = await res.json();
+        tbody.innerHTML = '';
+        data.forEach((msg, i) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${msg.name}</td>
+                    <td>${msg.subject || 'استفسار'}</td>
+                    <td>${msg.messageText || msg.content}</td>
+                    <td><button class="btn-tbl text-danger" onclick="deleteItem('Contact', ${msg.id})"><i class="bi bi-trash"></i></button></td>
+                </tr>`;
+        });
+    } catch (err) { console.error(err); }
+}
+
 async function deleteItem(api, id) {
-    if (confirm('هل أنتِ متأكدة من عملية الحذف؟')) {
-        try {
-            await fetch(`/api/${api}/${id}`, { method: 'DELETE' });
-            if (api === 'Requests') fetchRequests();
-            else if (api === 'Volunteers') fetchVolunteers();
-            updateDashboardCounts();
-        } catch (err) { alert('حدث خطأ أثناء الحذف'); }
+    if (confirm('هل أنتِ متأكدة؟')) {
+        await fetch(`/api/${api}/${id}`, { method: 'DELETE' });
+        if (api === 'Requests') fetchRequests();
+        else if (api === 'Volunteers') fetchVolunteers();
+        else if (api === 'Contact') fetchMessages();
+        updateDashboardCounts();
     }
 }
 
-// 5. تحديث الأرقام في الواجهة الرئيسية (Dashboard Stats)
 async function updateDashboardCounts() {
     try {
-        const [reqRes, volRes] = await Promise.all([
-            fetch('/api/Requests'),
-            fetch('/api/Volunteers')
-        ]);
-        const requests = await reqRes.json();
-        const volunteers = await volRes.json();
-        
-        // تحديث العدادات في المربعات العلوية (إذا كانت موجودة)
-        const userStat = document.getElementById('totalUsersStat');
-        if (userStat) userStat.textContent = requests.length + volunteers.length;
-        
-        const reqCountBadge = document.getElementById('reqCount');
-        if (reqCountBadge) reqCountBadge.textContent = requests.length;
-    } catch (err) { console.log("Stats update failed"); }
+        const [r, v, m] = await Promise.all([fetch('/api/Requests'), fetch('/api/Volunteers'), fetch('/api/Contact')]);
+        const rd = await r.json(); const vd = await v.json(); const md = await m.json();
+        document.getElementById('totalStats').textContent = rd.length + vd.length + md.length;
+        document.getElementById('reqCount').textContent = rd.length;
+    } catch (e) { console.log("Stats error"); }
 }
 
-// 6. القائمة الجانبية للموبايل
 function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    if (sidebar) sidebar.classList.toggle('open');
-    if (overlay) overlay.classList.toggle('show');
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
 }
