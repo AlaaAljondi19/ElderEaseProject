@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/admin.css?v=1.5" />
+    <link rel="stylesheet" href="./assets/css/admin.css?v=1.6" />
 </head>
 <body>
 
@@ -18,42 +18,35 @@
             <h3><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</h3>
             <small>لوحة تحكم المدير</small>
         </div>
-
         <nav class="sidebar-nav">
             <div class="sidebar-section">الرئيسية</div>
-            <a href="#" class="sidebar-link active" onclick="showSection('dashboard', this)">
+            <a href="#" class="sidebar-link active" onclick="showSection('dashboard', this, event)">
                 <i class="bi bi-grid-fill"></i> لوحة التحكم
             </a>
-            <a href="#" class="sidebar-link" onclick="showSection('requests', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('requests', this, event)">
                 <i class="bi bi-life-preserver"></i> طلبات المساعدة
-                <span class="badge me-auto">12</span>
+                <span class="badge me-auto" id="reqCount">0</span>
             </a>
-
             <div class="sidebar-section">إدارة المحتوى</div>
-            <a href="#" class="sidebar-link" onclick="showSection('volunteers', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('volunteers', this, event)">
                 <i class="bi bi-people-fill"></i> المتطوعون
             </a>
-            <a href="#" class="sidebar-link" onclick="showSection('users', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('users', this, event)">
                 <i class="bi bi-person-circle"></i> المستخدمون
             </a>
-            <a href="#" class="sidebar-link" onclick="showSection('organizations', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('organizations', this, event)">
                 <i class="bi bi-hospital"></i> المؤسسات
             </a>
-            <a href="#" class="sidebar-link" onclick="showSection('messages', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('messages', this, event)">
                 <i class="bi bi-envelope-fill"></i> الرسائل
-                <span class="badge me-auto">5</span>
             </a>
-
             <div class="sidebar-section">الإعدادات</div>
-            <a href="#" class="sidebar-link" onclick="showSection('settings', this)">
+            <a href="#" class="sidebar-link" onclick="showSection('settings', this, event)">
                 <i class="bi bi-gear-fill"></i> إعدادات الموقع
             </a>
         </nav>
-
         <div class="sidebar-footer">
-            <a href="index.html">
-                <i class="bi bi-house-fill"></i> العودة للموقع
-            </a>
+            <a href="index.html"><i class="bi bi-house-fill"></i> العودة للموقع</a>
         </div>
     </aside>
 
@@ -64,79 +57,76 @@
                 <h4 id="pageTitle">لوحة التحكم</h4>
             </div>
             <div class="topbar-right">
-                <i class="bi bi-bell fs-5" style="color:var(--muted);cursor:pointer;"></i>
-                <div class="admin-avatar">م</div>
-                <span class="d-none d-sm-inline" style="font-weight:600;font-size:.9rem;">المدير</span>
+                <div class="admin-avatar">A</div>
+                <span class="d-none d-sm-inline" style="font-weight:600;">عليا بسام</span>
             </div>
         </div>
 
         <div class="page-area">
             <div class="section active" id="section-dashboard">
-                <div class="row g-3 mb-4">
-                    <div class="col-6 col-xl-3">
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
                         <div class="stat-card">
-                            <div class="stat-icon orange"><i class="bi bi-people-fill"></i></div>
+                            <div class="stat-icon orange"><i class="bi bi-people"></i></div>
                             <div class="stat-info"><div class="num">247</div><div class="label">مستخدم</div></div>
                         </div>
                     </div>
-                    <div class="col-6 col-xl-3">
-                        <div class="stat-card">
-                            <div class="stat-icon blue"><i class="bi bi-life-preserver"></i></div>
-                            <div class="stat-info"><div class="num">84</div><div class="label">طلب</div></div>
-                        </div>
                     </div>
-                    <div class="col-6 col-xl-3">
-                        <div class="stat-card">
-                            <div class="stat-icon green"><i class="bi bi-person-check-fill"></i></div>
-                            <div class="stat-info"><div class="num">32</div><div class="label">متطوع</div></div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-xl-3">
-                        <div class="stat-card">
-                            <div class="stat-icon purple"><i class="bi bi-envelope-fill"></i></div>
-                            <div class="stat-info"><div class="num">18</div><div class="label">رسالة</div></div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="section" id="section-requests">
-                <h5 class="mb-3">طلبات المساعدة الواردة</h5>
                 <div class="table-card">
+                    <div class="card-head">
+                        <h6>طلبات المساعدة الواردة</h6>
+                        <button class="btn-primary-sm" onclick="fetchRequests()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>الاسم</th>
                                     <th>النوع</th>
-                                    <th>الهاتف</th>
                                     <th>الحالة</th>
                                     <th>إجراء</th>
                                 </tr>
                             </thead>
-                            <tbody id="requestsTableBody">
+                            <tbody id="requestsTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="p-3 border-top d-flex justify-content-center gap-2" id="reqPagination"></div>
+                </div>
+            </div>
+
+            <div class="section" id="section-volunteers">
+                <div class="table-card">
+                    <div class="card-head">
+                        <h6>إدارة المتطوعين</h6>
+                        <select class="form-select form-select-sm w-auto" onchange="filterVolunteers(this.value)">
+                            <option value="">كل التخصصات</option>
+                            <option value="medical">طبية</option>
+                            <option value="social">اجتماعية</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>1</td>
-                                    <td>أحمد محمد</td>
-                                    <td>مساعدة طبية</td>
-                                    <td>0791234567</td>
-                                    <td><span class="badge bg-warning text-dark">قيد الانتظار</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                    </td>
+                                    <th>الاسم</th>
+                                    <th>التخصص</th>
+                                    <th>الحالة</th>
+                                    <th>إجراء</th>
                                 </tr>
-                            </tbody>
+                            </thead>
+                            <tbody id="volunteersTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./assets/js/admin.js?v=1.5"></script>
+    <script src="./assets/js/admin.js?v=1.6"></script>
 </body>
 </html>
