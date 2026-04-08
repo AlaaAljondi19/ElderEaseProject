@@ -43,3 +43,80 @@
     footer{background:#2d2d2d;color:#ccc;text-align:center;padding:24px;font-size:.9rem;margin-top:60px;}
     footer span{color:var(--primary);}
     @media(max-width:576px){.appt-item{flex-wrap:wrap;} .appt-actions{width:100%;justify-content:flex-end;}}
+.modal-overlay {
+    display: none !important; /* سيتم تغييره برمجياً */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    z-index: 999999 !important; /* أعلى رقم ممكن */
+    align-items: center;
+    justify-content: center;
+}
+.modal-card {
+    background: white;
+    width: 90%;
+    max-width: 320px;
+    /* أزيلت الـ margin القديمة لأننا نستخدم flex للتوسيط الآن */
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: fadeInModal 0.3s ease; /* إضافة حركة ناعمة كما تحبين */
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header-red {
+    background: #dc3545;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.modal-body {
+    padding: 25px;
+    color: #333;
+    font-size: 1rem;
+}
+
+.modal-footer-btns {
+    padding: 15px;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* تنسيق أزرار النافذة لتبدو احترافية */
+.btn-red {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-gray {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}

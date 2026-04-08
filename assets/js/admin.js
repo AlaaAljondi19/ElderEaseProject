@@ -94,27 +94,39 @@ function renderInitialChart() {
 }
 
 // 6. جلب طلبات المساعدة وعرضها في الجدول
+// 6. جلب طلبات المساعدة وعرضها في الجدول
 async function loadAllRequests() {
     const tableBody = document.getElementById('all-requests-table');
     if (!tableBody) return;
 
-    try {
-        // هنا سيتم الربط بـ GET /api/HelpRequests
-        const demoData = [
-            { id: 84, name: 'أم خالد الردي', type: 'طبي', phone: '0599111222', status: 'قيد المعالجة' },
-            { id: 83, name: 'أبو محمد الرشيد', type: 'فاتورة', phone: '0598222333', status: 'تم' }
-        ];
+    // إظهار رسالة "جاري التحميل" بشكل بسيط
+    tableBody.innerHTML = '<tr><td colspan="8" class="text-center">جاري جلب البيانات...</td></tr>';
 
-        tableBody.innerHTML = '';
-        demoData.forEach(req => {
+    try {
+        // 1. الربط الفعلي: ننتظر البيانات من السيرفر
+        const response = await fetch(`${API_BASE_URL}/HelpRequests`);
+
+        // 2. تحويل البيانات القادمة إلى JSON
+        const realData = await response.json();
+
+        tableBody.innerHTML = ''; // تفريغ الجدول من رسالة التحميل
+
+        // 3. التأكد من أن البيانات ليست فارغة
+        if (realData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">لا توجد طلبات حالياً</td></tr>';
+            return;
+        }
+
+        // 4. عرض البيانات الحقيقية بدلاً من demoData
+        realData.forEach(req => {
             tableBody.innerHTML += `
                 <tr>
                     <td>${req.id}</td>
                     <td>${req.name}</td>
                     <td>${req.type}</td>
-                    <td>وصف تجريبي...</td>
+                    <td>${req.description || 'لا يوجد وصف'}</td> 
                     <td>${req.phone}</td>
-                    <td>2025-04-07</td>
+                    <td>${req.date || '2026-04-09'}</td>
                     <td><span class="status-badge ${req.status === 'تم' ? 's-active' : ''}">${req.status}</span></td>
                     <td>
                         <div class="d-flex gap-1">
@@ -124,14 +136,18 @@ async function loadAllRequests() {
                     </td>
                 </tr>`;
         });
-    } catch (e) { console.error(e); }
+    } catch (error) {
+        console.error("فشل جلب البيانات:", error);
+        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">خطأ في الاتصال بالسيرفر!</td></tr>';
+    }
 }
+
 
 // 7. إضافة متطوع جديد (POST)
 async function addVolunteer(e) {// أضيفي هذا في أول دالة addVolunteer
     const nameInput = document.getElementById('new-vol-name');
     const nameError = document.getElementById('nameError');
-
+    event.preventDefault();
     if (nameInput.value.trim() === "") {
         nameError.style.display = "block"; // إظهار النص الأحمر
         nameInput.style.borderColor = "#dc3545"; // تلوين حدود الحقل بالأحمر
@@ -161,9 +177,45 @@ async function addVolunteer(e) {// أضيفي هذا في أول دالة addVol
 }
 
 // 8. حذف طلب (DELETE)
+// متغير عام لحفظ رقم الطلب
+var requestToDelete = null;
+
 function confirmDelete(id) {
-    if (confirm(`هل أنتِ متأكدة من حذف الطلب رقم ${id}؟`)) {
-        console.log(`ارسال طلب DELETE إلى /api/HelpRequests/${id}`);
-        // بعد النجاح: loadAllRequests();
+    // حفظ الرقم
+    requestToDelete = id;
+
+    // إظهار النافذة (تأكدي أن الـ ID مطابق للـ HTML)
+    const myModal = document.getElementById('deleteModal');
+    if (myModal) {
+        myModal.style.display = 'block';
+        document.getElementById('deleteModalText').innerText = "هل أنتِ متأكدة من حذف الطلب رقم " + id + "؟";
+    }
+}
+
+// تأكدي أن هذه الدوال موجودة في آخر سطر في الملف، وليست داخل أي قوس آخر
+function closeConfirmModal() {
+    const myModal = document.getElementById('deleteModal');
+    if (myModal) {
+        myModal.style.display = 'none';
+    }
+}
+
+async function loadAllRequests() {
+    const tableBody = document.getElementById('all-requests-table');
+    if (!tableBody) return;
+
+    try {
+        // جلب البيانات الحقيقية من السيرفر
+        const response = await fetch(`${API_BASE_URL}/HelpRequests`);
+        const realData = await response.json();
+
+        tableBody.innerHTML = ''; // تفريغ الجدول
+        realData.forEach(req => {
+            // كود رسم الصفوف (نفس كودك الحالي)
+        });
+    } catch (e) {
+        console.error("خطأ في جلب البيانات:", e);
+
+
     }
 }
