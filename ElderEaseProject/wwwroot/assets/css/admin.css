@@ -1,0 +1,41 @@
+/* === admin.css === */
+:root { 
+    --primary:#c07a52; --primary-dk:#a05e38; --primary-lt:#f5ede6; 
+    --bg:#f0ece8; --text:#2d2d2d; --sidebar:#2d2420; --border:#e8ddd6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); display: flex; }
+
+/* SIDEBAR */
+.sidebar { width: 260px; background: var(--sidebar); color: #eee; position: fixed; right: 0; height: 100vh; z-index: 100; transition: 0.3s; }
+.sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #ccc; text-decoration: none; border-right: 4px solid transparent; }
+.sidebar-link.active { background: rgba(192, 122, 82, 0.1); color: var(--primary); border-right-color: var(--primary); }
+
+/* MAIN CONTENT */
+.main-content { margin-right: 260px; flex: 1; min-height: 100vh; transition: 0.3s; }
+.topbar { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
+
+/* TABLES & CARDS */
+.page-area { padding: 30px; }
+.table-card { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+.card-head { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+table { width: 100%; border-collapse: collapse; }
+th { background: #fafafa; padding: 12px; font-size: 0.85rem; text-align: right; border-bottom: 1px solid var(--border); }
+td { padding: 15px 12px; border-bottom: 1px solid #f9f9f9; font-size: 0.9rem; }
+
+/* BADGES & BUTTONS */
+.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+.s-pending { background: #fff3e0; color: #ef6c00; }
+.s-done { background: #e8f5e9; color: #2e7d32; }
+.s-active { background: #e3f2fd; color: #1565c0; }
+.btn-tbl { border: 1px solid var(--border); background: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+.btn-tbl.danger:hover { border-color: #d32f2f; color: #d32f2f; }
+.btn-primary-sm { background: var(--primary); color: #fff; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .sidebar { transform: translateX(100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-right: 0; }
+    .menu-toggle { display: block !important; }
+}

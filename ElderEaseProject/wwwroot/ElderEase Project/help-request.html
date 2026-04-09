@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ElderEase - طلب المساعدة</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/help-request.css" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+                    <li><a class="nav-link" href="index.html">الرئيسية</a></li>
+                    <li><a class="nav-link active" href="help-request.html">طلب مساعدة</a></li>
+                    <li><a class="nav-link" href="learn.html">تعلم الخدمات</a></li>
+                    <li><a class="nav-link" href="volunteers.html">المتطوعون</a></li>
+                    <li><a class="nav-link" href="appointments.html">المواعيد</a></li>
+                    <li><a class="nav-link" href="gov-services.html">الخدمات الحكومية</a></li>
+                    <li><a class="nav-link" href="organizations.html">المؤسسات</a></li>
+                    <li><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+                </ul>
+                <a href="admin.html" class="nav-link btn-admin"><i class="bi bi-shield-lock ms-1"></i> الإدارة</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container text-center text-md-start">
+            <h2><i class="bi bi-life-preserver"></i> طلب المساعدة</h2>
+            <p>أرسل لنا طلبك وسيتواصل معك أحد المتطوعين في أقرب وقت ممكن</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="form-card">
+            <div class="alert-success" id="successAlert">
+                <i class="bi bi-check-circle-fill fs-4"></i>
+                <div><strong>تم إرسال طلبك بنجاح!</strong><br />سيتواصل معك أحد المتطوعين قريباً.</div>
+            </div>
+
+            <form id="helpForm" onsubmit="submitForm(event)">
+                <div class="mb-4">
+                    <label class="form-label">الاسم (اختياري)</label>
+                    <input type="text" class="form-control" id="name" name="Name" placeholder="أدخل اسمك" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">نوع المشكلة <span class="text-danger">*</span></label>
+                    <div class="problem-types">
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'medical')">
+                            <i class="bi bi-hospital"></i> <span>حجز موعد طبي</span>
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'bill')">
+                            <i class="bi bi-receipt"></i> <span>دفع فاتورة</span>
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'app')">
+                            <i class="bi bi-phone"></i> <span>استخدام تطبيق</span>
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'gov')">
+                            <i class="bi bi-building"></i> <span>خدمة حكومية</span>
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'internet')">
+                            <i class="bi bi-wifi"></i> <span>مشكلة انترنت</span>
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this,'other')">
+                            <i class="bi bi-three-dots"></i> <span>أخرى</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="problemType" name="ProblemType" required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">وصف المشكلة <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="Description" rows="5" placeholder="اشرح مشكلتك بالتفصيل وسنساعدك..." required></textarea>
+                    <div class="form-text mt-2">كلما كان الوصف أوضح، كان بإمكاننا مساعدتك بشكل أفضل.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">رقم الهاتف (اختياري - للتواصل المباشر)</label>
+                    <input type="tel" class="form-control" id="phone" name="Phone" placeholder="05xxxxxxxx" />
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-send-fill ms-2"></i> إرسال الطلب
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>جميع الحقوق محفوظة &copy; 2026 <span>إيلدر إيز</span></p></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/help-request.js"></script>
+</body>
+</html>

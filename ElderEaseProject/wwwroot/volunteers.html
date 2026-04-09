@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElderEase - المتطوعون</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/volunteers.css" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li><a class="nav-link" href="index.html">الرئيسية</a></li>
+        <li><a class="nav-link" href="help-request.html">طلب مساعدة</a></li>
+        <li><a class="nav-link" href="learn.html">تعلم الخدمات</a></li>
+        <li><a class="nav-link active" href="volunteers.html">المتطوعون</a></li>
+        <li><a class="nav-link" href="appointments.html">المواعيد</a></li>
+        <li><a class="nav-link" href="gov-services.html">الخدمات الحكومية</a></li>
+        <li><a class="nav-link" href="organizations.html">المؤسسات</a></li>
+        <li><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+      </ul>
+      <a href="admin.html" class="nav-link btn-admin"><i class="bi bi-shield-lock ms-1"></i> الإدارة</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h2><i class="bi bi-people" style="color:var(--primary)"></i> المتطوعون</h2>
+    <p>فريق متخصص من المتطوعين جاهزون لمساعدتك في أي وقت</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterVol(this,'all')">الكل</button>
+    <button class="filter-tab" onclick="filterVol(this,'technical')">تقني</button>
+    <button class="filter-tab" onclick="filterVol(this,'guidance')">إرشاد</button>
+    <button class="filter-tab" onclick="filterVol(this,'general')">مساعدة عامة</button>
+  </div>
+
+  <div class="row g-4" id="volunteersGrid">
+    <div class="col-12 text-center p-5">
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2">جاري جلب المتطوعين...</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="contactVolModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">إرسال رسالة للمتطوع</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-success d-none" id="volMsgSuccess">تم إرسال رسالتك بنجاح!</div>
+        <form id="volContactForm" onsubmit="sendVolMsg(event)">
+          <input type="hidden" id="volunteerName" name="VolunteerName" />
+          <div class="mb-3">
+            <label class="form-label">المتطوع</label>
+            <input type="text" class="form-control" id="volNameDisplay" readonly />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">اسمك</label>
+            <input type="text" class="form-control" name="SenderName" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">رقم هاتفك</label>
+            <input type="tel" class="form-control" name="Phone" required />
+          </div>
+          <div class="mb-4">
+            <label class="form-label">رسالتك</label>
+            <textarea class="form-control" name="Message" rows="4" required></textarea>
+          </div>
+          <div class="d-flex gap-2 justify-content-end">
+            <button type="submit" class="btn btn-primary px-4" style="background-color:var(--primary); border:none;">إرسال</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>جميع الحقوق محفوظة &copy; 2026 <span>إيلدر إيز</span></p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/volunteers.js"></script>
+</body>
+</html>

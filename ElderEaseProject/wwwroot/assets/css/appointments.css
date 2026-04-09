@@ -1,0 +1,304 @@
+/* === assets/css/appointments.css === */
+
+:root { 
+    --primary: #c07a52; 
+    --primary-dk: #a05e38; 
+    --primary-lt: #f5ede6; 
+    --bg: #faf7f4; 
+    --text: #2d2d2d; 
+    --muted: #7a6f67; 
+    --border: #e8ddd6; 
+    --radius: 14px; 
+}
+
+* { 
+    box-sizing: border-box; 
+}
+
+body { 
+    font-family: 'Tajawal', sans-serif; 
+    font-size: 18px; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+}
+
+/* NAVBAR */
+.navbar { 
+    background: #fff; 
+    border-bottom: 1px solid var(--border); 
+    padding: .75rem 0; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    box-shadow: 0 2px 12px rgba(0,0,0,.05); 
+}
+
+.navbar-brand { 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    color: var(--primary)!important; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    text-decoration: none; 
+}
+
+.nav-link { 
+    font-size: .95rem; 
+    font-weight: 500; 
+    color: var(--text)!important; 
+    padding: .4rem .85rem!important; 
+    border-radius: 8px; 
+    transition: all .2s; 
+}
+
+.nav-link:hover, .nav-link.active { 
+    background: var(--primary-lt); 
+    color: var(--primary)!important; 
+}
+
+.btn-admin { 
+    background: var(--text)!important; 
+    color: #fff!important; 
+    border-radius: 8px; 
+    font-weight: 600; 
+    padding: .4rem 1.1rem!important; 
+}
+
+/* HEADER */
+.page-header { 
+    background: linear-gradient(135deg, var(--primary-lt), #fff); 
+    padding: 50px 0 40px; 
+    border-bottom: 1px solid var(--border); 
+    margin-bottom: 40px; 
+}
+
+.page-header h2 { 
+    font-size: 2rem; 
+    margin-bottom: 8px; 
+}
+
+.page-header p { 
+    color: var(--muted); 
+    margin: 0; 
+}
+
+/* BTN ADD */
+.btn-add { 
+    background: var(--primary); 
+    color: #fff; 
+    border: none; 
+    border-radius: 10px; 
+    padding: .75rem 1.8rem; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    font-family: 'Tajawal', sans-serif; 
+    cursor: pointer; 
+    transition: all .2s; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.btn-add:hover { 
+    background: var(--primary-dk); 
+}
+
+/* APPOINTMENT ITEM */
+.appt-item { 
+    background: #fff; 
+    border: 1.5px solid var(--border); 
+    border-radius: var(--radius); 
+    padding: 1.3rem 1.5rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 16px; 
+    margin-bottom: 12px; 
+    transition: all .3s ease-in-out; /* إضافة التنعيم هنا */
+}
+
+.appt-item:hover { 
+    border-color: var(--primary); 
+    box-shadow: 0 4px 16px rgba(192,122,82,.1); 
+}
+
+.appt-date-box { 
+    min-width: 72px; 
+    height: 72px; 
+    background: var(--primary-lt); 
+    border-radius: 12px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    flex-shrink: 0; 
+}
+
+.appt-date-box .day { 
+    font-size: 1.7rem; 
+    font-weight: 800; 
+    color: var(--primary); 
+    line-height: 1; 
+}
+
+.appt-date-box .month { 
+    font-size: .72rem; 
+    color: var(--muted); 
+}
+
+.appt-info { 
+    flex: 1; 
+}
+
+.appt-info h6 { 
+    font-size: 1.05rem; 
+    font-weight: 700; 
+    margin-bottom: 4px; 
+}
+
+.appt-info .appt-meta { 
+    font-size: .88rem; 
+    color: var(--muted); 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    flex-wrap: wrap; 
+}
+
+.appt-info .appt-meta span { 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+/* BADGES */
+.type-badge { 
+    display: inline-block; 
+    padding: 3px 12px; 
+    border-radius: 50px; 
+    font-size: .78rem; 
+    font-weight: 700; 
+}
+
+.type-medical { background: #fce4ec; color: #880e4f; }
+.type-bill { background: #fff3e0; color: #e65100; }
+.type-general { background: #e3f2fd; color: #1565c0; }
+.type-exam { background: #f3e5f5; color: #6a1b9a; }
+
+/* ACTIONS */
+.appt-actions { 
+    margin-right: auto; 
+    display: flex; 
+    gap: 8px; 
+}
+
+.btn-del { 
+    background: transparent; 
+    border: 1.5px solid #e53935; 
+    color: #e53935; 
+    border-radius: 8px; 
+    padding: 6px 14px; 
+    font-size: .85rem; 
+    font-weight: 600; 
+    font-family: 'Tajawal', sans-serif; 
+    cursor: pointer; 
+    transition: all .2s; 
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+}
+
+.btn-del:hover { 
+    background: #ffebee; 
+}
+
+/* EMPTY STATE */
+.empty-state { 
+    text-align: center; 
+    padding: 60px 20px; 
+    color: var(--muted); 
+}
+
+.empty-state i { 
+    font-size: 4rem; 
+    opacity: .25; 
+    display: block; 
+    margin-bottom: 16px; 
+}
+
+.empty-state p { 
+    font-size: 1.1rem; 
+}
+
+/* MODAL */
+.modal-content { 
+    border-radius: var(--radius); 
+    border: none; 
+}
+
+.modal-header { 
+    background: var(--primary-lt); 
+    border-bottom: 1px solid var(--border); 
+}
+
+.modal-title { 
+    color: var(--primary); 
+    font-weight: 700; 
+}
+
+.form-control, .form-select { 
+    font-family: 'Tajawal', sans-serif; 
+    font-size: 1rem; 
+    border: 1.5px solid var(--border); 
+    border-radius: 10px; 
+    padding: .75rem 1rem; 
+}
+
+.form-control:focus, .form-select:focus { 
+    border-color: var(--primary); 
+    box-shadow: 0 0 0 3px rgba(192,122,82,0.12); 
+    outline: none;
+}
+
+.form-label { 
+    font-weight: 600; 
+}
+
+.btn-save { 
+    background: var(--primary); 
+    color: #fff; 
+    border: none; 
+    border-radius: 10px; 
+    padding: .75rem 2rem; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    font-family: 'Tajawal', sans-serif; 
+    cursor: pointer; 
+    transition: background 0.2s;
+}
+
+.btn-save:hover {
+    background: var(--primary-dk);
+}
+
+/* FOOTER */
+footer { 
+    background: #2d2d2d; 
+    color: #ccc; 
+    text-align: center; 
+    padding: 24px; 
+    font-size: .9rem; 
+    margin-top: 60px; 
+}
+
+footer span { 
+    color: var(--primary); 
+}
+
+/* RESPONSIVE */
+@media(max-width:576px) { 
+    .appt-item { flex-wrap: wrap; } 
+    .appt-actions { width: 100%; justify-content: flex-end; } 
+}
