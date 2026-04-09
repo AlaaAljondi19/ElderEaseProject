@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElderEase - لوحة الإدارة</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header-red">
+            <i class="bi bi-exclamation-triangle-fill"></i> تنبيه حذف
+        </div>
+        <div class="modal-body">
+            <p id="deleteModalText">هل أنتِ متأكدة من حذف هذا الطلب؟</p>
+        </div>
+        <div class="modal-footer-btns">
+            <button class="btn-gray" onclick="closeConfirmModal()">إلغاء</button>
+            <button id="finalDeleteBtn" class="btn-red" onclick="finishDelete()">نعم، احذف</button>
+        </div>
+    </div>
+</div>
+<body>
+
+<!-- OVERLAY (mobile) -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <h3><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</h3>
+    <small>لوحة تحكم المدير</small>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">الرئيسية</div>
+    <a href="#" class="sidebar-link active" onclick="showSection('dashboard',this)">
+      <i class="bi bi-grid-fill"></i> لوحة التحكم
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('requests',this)">
+      <i class="bi bi-life-preserver"></i> طلبات المساعدة
+      <span class="badge me-auto">12</span>
+    </a>
+
+    <div class="sidebar-section">إدارة المحتوى</div>
+    <a href="#" class="sidebar-link" onclick="showSection('volunteers',this)">
+      <i class="bi bi-people-fill"></i> المتطوعون
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('users',this)">
+      <i class="bi bi-person-circle"></i> المستخدمون
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('organizations',this)">
+      <i class="bi bi-hospital"></i> المؤسسات
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('messages',this)">
+      <i class="bi bi-envelope-fill"></i> الرسائل
+      <span class="badge me-auto">5</span>
+    </a>
+
+    <div class="sidebar-section">الإعدادات</div>
+    <a href="#" class="sidebar-link" onclick="showSection('settings',this)">
+      <i class="bi bi-gear-fill"></i> إعدادات الموقع
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="index.html">
+      <i class="bi bi-house-fill"></i> العودة للموقع
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="topbar">
+    <div class="d-flex align-items-center gap-3">
+      <button class="menu-toggle" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+      <h4 id="pageTitle">لوحة التحكم</h4>
+    </div>
+    <div class="topbar-right">
+      <i class="bi bi-bell fs-5" style="color:var(--muted);cursor:pointer;"></i>
+      <div class="admin-avatar">م</div>
+      <span style="font-weight:600;font-size:.9rem;">المدير</span>
+    </div>
+  </div>
+
+  <div class="page-area">
+
+      <!-- ================================
+         SECTION: لوحة التحكم
+    ================================ -->
+      <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <h6 style="font-weight:800; color:var(--primary); margin:0;">
+              <i class="bi bi-clock-history me-2"></i> آخر طلبات المساعدة المستلمة
+          </h6>
+          <button class="btn-primary-sm" onclick="showSection('requests')">عرض الكل</button>
+      </div>
+
+      <div class="table-card">
+          <div class="table-responsive">
+              <table>
+              </table>
+          </div>
+      </div>
+      <div class="section active" id="section-dashboard">
+          <div class="row g-3 mb-4">
+              <div class="col-sm-6 col-xl-3">
+                  <div class="stat-card">
+                      <div class="stat-icon orange"><i class="bi bi-people-fill"></i></div>
+                      <div class="stat-info">
+                          <div class="num" id="users-count">0</div> <div class="label">مستخدم مسجل</div>
+                          <div class="change up">▲ تحديث لحظي</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="stat-card">
+                      <div class="stat-icon blue"><i class="bi bi-life-preserver"></i></div>
+                      <div class="stat-info">
+                          <div class="num" id="requests-count">0</div> <div class="label">طلب مساعدة</div>
+                          <div class="change up">▲ تحديث لحظي</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="stat-card">
+                      <div class="stat-icon green"><i class="bi bi-person-check-fill"></i></div>
+                      <div class="stat-info">
+                          <div class="num" id="volunteers-count">0</div> <div class="label">متطوع نشط</div>
+                          <div class="change up">▲ تحديث لحظي</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6 col-xl-3">
+                  <div class="stat-card">
+                      <div class="stat-icon purple"><i class="bi bi-envelope-fill"></i></div>
+                      <div class="stat-info">
+                          <div class="num" id="messages-count">0</div> <div class="label">رسالة جديدة</div>
+                          <div class="change down">▼ تحديث لحظي</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- CHART + QUICK ACTIONS -->
+          <h5 class="mb-4" style="font-weight:800;">احصائيات اخر  7 ايام :</h5>
+          <div class="row g-3 mb-4">
+          </div>
+          <div class="row g-3 mb-4">
+              <div class="col-lg-8">
+                  <div class="table-card">
+                      <div class="p-4">
+                          <div class="bar-chart d-flex justify-content-between align-items-end" id="adminBarChart" style="height: 150px;">
+                              طلبات المساعدة - آخر 7 أيام
+                          </div>
+                          <div class="bar-labels d-flex justify-content-between mt-2" id="adminBarLabels">
+                          </div>
+                      </div>
+                      <div class="p-4">
+                          <div class="bar-chart" id="barChart"></div>
+                          <div class="bar-labels" id="barLabels"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-4">
+                  <div class="table-card">
+                      <div class="card-head"><h6><i class="bi bi-lightning me-2" style="color:var(--primary)"></i>إجراءات سريعة</h6></div>
+                      <div class="p-3">
+                          <div class="row g-2">
+                              <div class="col-6">
+                                  <div class="quick-action" onclick="showSection('volunteers', document.querySelector('[onclick*=volunteers]'))">
+                                      <i class="bi bi-person-plus-fill"></i>
+                                      <p>إضافة متطوع</p>
+                                  </div>
+                              </div>
+                              <div class="col-6">
+                                  <div class="quick-action" onclick="showSection('requests', document.querySelector('[onclick*=requests]'))">
+                                      <i class="bi bi-inbox-fill"></i>
+                                      <p>عرض الطلبات</p>
+                                  </div>
+                              </div>
+                              <div class="col-6">
+                                  <div class="quick-action" onclick="showSection('messages', document.querySelector('[onclick*=messages]'))">
+                                      <i class="bi bi-envelope-open-fill"></i>
+                                      <p>الرسائل</p>
+                                  </div>
+                              </div>
+                              <div class="col-6">
+                                  <div class="quick-action" onclick="showSection('settings', document.querySelector('[onclick*=settings]'))">
+                                      <i class="bi bi-sliders"></i>
+                                      <p>الإعدادات</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- RECENT REQUESTS TABLE -->
+          <div class="table-card">
+              <div class="card-head">
+                  <h6><i class="bi bi-clock-history me-2" style="color:var(--primary)"></i>آخر طلبات المساعدة</h6>
+                  <button class="btn-primary-sm" onclick="showSection('requests', document.querySelector('[onclick*=requests]'))">
+                      عرض الكل
+                  </button>
+              </div>
+              <div class="table-responsive">
+                  <table>
+                      <thead>
+                          <tr><th>#</th><th>الاسم</th><th>نوع المشكلة</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr>
+                      </thead>
+                      <tbody id="recent-requests-list">
+                          <tr>
+                              <td colspan="6" class="text-center">جاري تحميل أحدث الطلبات...</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      <!-- ================================
+         SECTION: طلبات المساعدة
+    ================================ -->
+      <div class="section" id="section-requests">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <h5 style="margin:0;font-weight:800;">طلبات المساعدة</h5>
+              <div class="d-flex gap-2">
+                  <select class="form-select form-select-sm" style="width:auto;border-radius:8px;">
+                      <option>كل الطلبات</option>
+                      <option>قيد المعالجة</option>
+                      <option>تمت</option>
+                  </select>
+              </div>
+          </div>
+
+
+          <div class="table-card">
+              <div class="table-responsive">
+                  <table>
+                      <thead>
+                          <tr><th>#</th><th>الاسم</th><th>نوع المشكلة</th><th>وصف المشكلة</th><th>الهاتف</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr>
+                      </thead>
+                      <tbody id="all-requests-table">
+                          <tr>
+                              <td colspan="8" class="text-center p-5">
+                                  <div class="spinner-border text-primary" role="status"></div>
+                                  <p class="mt-2">جاري تحميل الطلبات...</p>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      <!-- ================================
+         SECTION: المتطوعون
+    ================================ -->
+      <div class="section" id="section-volunteers">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <h5 style="margin:0;font-weight:800;">إدارة المتطوعين</h5>
+              <button class="btn-primary-sm" data-bs-toggle="modal" data-bs-target="#addVolModal">
+                  <i class="bi bi-plus-circle"></i> إضافة متطوع
+              </button>
+          </div>
+          <div class="table-card">
+              <div class="table-responsive">
+                  <table>
+                      <thead>
+                          <tr><th>#</th><th>الاسم</th><th>التخصص</th><th>الهاتف</th><th>أوقات العمل</th><th>الحالة</th><th>إجراءات</th></tr>
+                      </thead>
+                      <tbody id="volunteers-table-body">
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+      <!-- ================================
+         SECTION: المستخدمون
+    ================================ -->
+      <div class="section" id="section-users">
+          <h5 class="mb-3" style="font-weight:800;">إدارة المستخدمين</h5>
+          <div class="table-card">
+              <div class="table-responsive">
+                  <table>
+                      <thead>
+                          <tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>تاريخ التسجيل</th><th>عدد الطلبات</th><th>الحالة</th><th>إجراءات</th></tr>
+                      </thead>
+                      <tbody id="users-table-body">
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+      <!-- ================================
+         SECTION: المؤسسات
+    ================================ -->
+      <div class="section" id="section-organizations">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <h5 style="margin:0;font-weight:800;">إدارة المؤسسات</h5>
+              <button class="btn-primary-sm"><i class="bi bi-plus-circle"></i> إضافة مؤسسة</button>
+          </div>
+          <div class="table-card">
+              <div class="table-responsive">
+                  <table>
+                      <thead><tr><th>#</th><th>اسم المؤسسة</th><th>النوع</th><th>الهاتف</th><th>الموقع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+                      <tbody id="orgs-table-body">
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+      <!-- ================================
+         SECTION: الرسائل
+    ================================ -->
+      <div class="section" id="section-messages">
+          <h5 class="mb-3" style="font-weight:800;">رسائل التواصل</h5>
+          <div class="table-card">
+              <div class="table-responsive">
+                  <table>
+                      <thead><tr><th>#</th><th>الاسم</th><th>البريد / الهاتف</th><th>الموضوع</th><th>الرسالة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+                      <tbody id="messages-table-body">
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+      <!-- ================================
+         SECTION: الإعدادات
+    ================================ -->
+      <div class="section" id="section-settings">
+          <h5 class="mb-3" style="font-weight:800;">إعدادات الموقع</h5>
+          <div class="row g-3">
+              <div class="col-lg-7">
+                  <div class="table-card p-4">
+                      <h6 class="mb-3" style="font-weight:700;color:var(--primary);">معلومات عامة</h6>
+                      <form id="settings-general-form">
+                          <div class="mb-3">
+                              <label class="form-label">اسم المنصة</label>
+                              <input type="text" id="set-platform-name" class="form-control" value="إيلدر إيز" />
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label">البريد الإلكتروني للتواصل</label>
+                              <input type="email" id="set-support-email" class="form-control" value="support@elderease.jo" />
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label">رقم الهاتف</label>
+                              <input type="text" id="set-support-phone" class="form-control" value="06-1234567" />
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label">رسالة الترحيب (الصفحة الرئيسية)</label>
+                              <textarea id="set-welcome-msg" class="form-control" rows="3">نحن هنا لنجعل التقنية أسهل لك</textarea>
+                          </div>
+                          <div class="mb-4">
+                              <label class="form-label">العنوان</label>
+                              <input type="text" id="set-address" class="form-control" value="عمان، المملكة الأردنية الهاشمية" />
+                          </div>
+                          <button type="submit" class="btn-primary-sm"><i class="bi bi-save me-1"></i> حفظ الإعدادات</button>
+                      </form>
+                  </div>
+              </div>
+
+              <div class="col-lg-5">
+                  <div class="table-card p-4">
+                      <h6 class="mb-3" style="font-weight:700;color:var(--primary);">إعدادات الأمان</h6>
+                      <form id="settings-security-form">
+                          <div class="mb-3">
+                              <label class="form-label">كلمة مرور المدير الحالية</label>
+                              <input type="password" id="current-password" class="form-control" />
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label">كلمة مرور جديدة</label>
+                              <input type="password" id="new-password" class="form-control" />
+                          </div>
+                          <div class="mb-4">
+                              <label class="form-label">تأكيد كلمة المرور</label>
+                              <input type="password" id="confirm-password" class="form-control" />
+                          </div>
+                          <button type="submit" class="btn-primary-sm"><i class="bi bi-key me-1"></i> تغيير كلمة المرور</button>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div><!-- /page-area -->
+</div><!-- /main-content -->
+
+<!-- MODAL: إضافة متطوع -->
+<div class="modal fade" id="addVolModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>إضافة متطوع جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addVolunteerForm" onsubmit="addVolunteer(event)"novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
+                        <input type="text" id="new-vol-name" class="form-control"  />
+                        <small id="nameError" class="text-danger" style="display:none; font-weight:bold; margin-top: 5px;">
+                            * يرجى إدخال اسم المتطوع!
+                        </small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">التخصص</label>
+                        <select class="form-select" id="new-vol-specialty">
+                            <option value="technical">تقني</option>
+                            <option value="guidance">إرشاد</option>
+                            <option value="general">مساعدة عامة</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رقم الهاتف <span class="text-danger">*</span></label>
+                        <input type="tel" id="new-vol-phone" class="form-control" required />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">أوقات العمل</label>
+                        <input type="text" id="new-vol-hours" class="form-control" placeholder="مثال: الأحد - الخميس: 9ص - 5م" />
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn-primary-sm"><i class="bi bi-check-circle me-1"></i> إضافة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="assets/js/admin.js"></script>
+  
+</body>
+</html>
