@@ -1,38 +1,37 @@
-:root { 
-    --primary: #c07a52; 
-    --bg: #f8f5f2; 
-    --text: #2d2d2d;
-}
+/* === volunteers.css === */
 
-body { 
-    background-color: var(--bg); 
-    font-family: 'Tajawal', sans-serif; 
-    color: var(--text);
-}
-
-.navbar { background: #fff; border-bottom: 1px solid #eee; padding: 15px 0; }
-.navbar-brand { font-weight: 800; color: var(--primary); }
-
-.page-header { padding: 50px 0; text-align: center; background: #fff; border-bottom: 1px solid #eee; margin-bottom: 40px; }
-.page-header h2 { font-weight: 800; margin-bottom: 10px; }
-
-.filter-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
-.filter-tab { border: 1px solid var(--primary); background: #fff; color: var(--primary); padding: 10px 30px; border-radius: 50px; cursor: pointer; transition: 0.3s; font-weight: 600; }
-.filter-tab.active, .filter-tab:hover { background: var(--primary); color: #fff; }
-
-.vol-card { background: #fff; border-radius: 20px; padding: 30px; text-align: center; border: 1px solid #f0f0f0; transition: 0.3s; height: 100%; }
-.vol-card:hover { transform: translateY(-8px); }
-
-.vol-avatar { width: 70px; height: 70px; background: #fdfaf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2rem; color: var(--primary); border: 1px solid var(--bg); }
-
-.specialty-badge { font-size: 0.8rem; padding: 5px 15px; border-radius: 50px; font-weight: 700; margin-bottom: 15px; display: inline-block; }
-.sp-technical { background: #e3f2fd; color: #1565c0; }
-.sp-guidance { background: #e8f5e9; color: #2e7d32; }
-.sp-general { background: #fff3e0; color: #ef6c00; }
-
-.vol-info-item { font-size: 0.9rem; color: #777; margin-bottom: 8px; }
-.btn-contact { width: 100%; border: none; background: var(--primary); color: #fff; padding: 12px; border-radius: 12px; font-weight: 700; transition: 0.3s; }
-.btn-contact:hover { background: #a66542; }
-
-footer { background: #fff; padding: 30px; text-align: center; margin-top: 50px; border-top: 1px solid #eee; }
-footer span { color: var(--primary); font-weight: 700; }
+:root { --primary:#c07a52; --primary-dk:#a05e38; --primary-lt:#f5ede6; --bg:#faf7f4; --text:#2d2d2d; --muted:#7a6f67; --border:#e8ddd6; --radius:14px; }
+    *{box-sizing:border-box;} body{font-family:'Tajawal',sans-serif;font-size:18px;background:var(--bg);color:var(--text);margin:0;}
+    .navbar{background:#fff;border-bottom:1px solid var(--border);padding:.75rem 0;position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+    .navbar-brand{font-size:1.5rem;font-weight:800;color:var(--primary)!important;display:flex;align-items:center;gap:8px;text-decoration:none;}
+    .nav-link{font-size:.95rem;font-weight:500;color:var(--text)!important;padding:.4rem .85rem!important;border-radius:8px;transition:all .2s;}
+    .nav-link:hover,.nav-link.active{background:var(--primary-lt);color:var(--primary)!important;}
+    .btn-admin{background:var(--text)!important;color:#fff!important;border-radius:8px;font-weight:600;padding:.4rem 1.1rem!important;}
+    .page-header{background:linear-gradient(135deg,var(--primary-lt),#fff);padding:50px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+    .page-header h2{font-size:2rem;margin-bottom:8px;} .page-header p{color:var(--muted);margin:0;}
+    /* FILTERS */
+    .filter-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;}
+    .filter-tab{background:#fff;border:1.5px solid var(--border);border-radius:50px;padding:8px 20px;font-family:'Tajawal',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+    .filter-tab:hover,.filter-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+    /* VOLUNTEER CARD */
+    .vol-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:2rem;height:100%;transition:all .25s;}
+    .vol-card:hover{border-color:var(--primary);box-shadow:0 8px 30px rgba(192,122,82,.12);transform:translateY(-3px);}
+    .vol-avatar{width:80px;height:80px;border-radius:50%;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+    .vol-avatar i{font-size:2.5rem;color:var(--primary);}
+    .specialty-badge{display:inline-block;padding:5px 14px;border-radius:50px;font-size:.82rem;font-weight:700;margin-bottom:.8rem;}
+    .sp-technical{background:#e3f2fd;color:#1565c0;} .sp-guidance{background:#f3e5f5;color:#6a1b9a;} .sp-general{background:#e8f5e9;color:#2e7d32;}
+    .vol-card h5{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;}
+    .vol-info-item{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:6px;}
+    .vol-info-item i{color:var(--primary);width:18px;}
+    .btn-contact{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:.7rem 1.5rem;font-size:.95rem;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;transition:all .2s;width:100%;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .btn-contact:hover{background:var(--primary-dk);}
+    /* MODAL */
+    .modal-content{border-radius:var(--radius);border:none;}
+    .modal-header{background:var(--primary-lt);border-bottom:1px solid var(--border);}
+    .modal-title{color:var(--primary);font-weight:700;}
+    .form-control,.form-select{font-family:'Tajawal',sans-serif;font-size:1rem;border:1.5px solid var(--border);border-radius:10px;padding:.75rem 1rem;}
+    .form-control:focus,.form-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(192,122,82,.12);}
+    .form-label{font-weight:600;}
+    .btn-send{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:.75rem 2rem;font-size:1rem;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;}
+    footer{background:#2d2d2d;color:#ccc;text-align:center;padding:24px;font-size:.9rem;margin-top:60px;}
+    footer span{color:var(--primary);}
