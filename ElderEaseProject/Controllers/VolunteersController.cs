@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ElderEaseProject.Data;
+﻿using ElderEaseProject.Data;
 using ElderEaseProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElderEaseProject.Controllers
 {
@@ -29,6 +30,15 @@ namespace ElderEaseProject.Controllers
             return await query.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Volunteer>> GetVolunteer(int id)
+        {
+            var volunteer = await _context.Volunteers.FindAsync(id);
+            if (volunteer == null) return NotFound();
+            return volunteer;
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Volunteer>> PostVolunteer(Volunteer volunteer)
         {

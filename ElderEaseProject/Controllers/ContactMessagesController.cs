@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using ElderEaseProject.Data;
 using ElderEaseProject.Models;
 
@@ -16,10 +17,20 @@ namespace ElderEaseProject.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ContactMessage>>> GetMessages()
         {
             return await _context.ContactMessages.ToListAsync();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ContactMessage>> GetMessage(int id)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message == null) return NotFound();
+            return message;
         }
 
         [HttpPost]

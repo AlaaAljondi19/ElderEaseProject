@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using ElderEaseProject.Data;
 using ElderEaseProject.Models;
 
@@ -29,6 +30,15 @@ namespace ElderEaseProject.Controllers
             return await query.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Organization>> GetOrganization(int id)
+        {
+            var organization = await _context.Organizations.FindAsync(id);
+            if (organization == null) return NotFound();
+            return organization;
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Organization>> PostOrganization(Organization organization)
         {
