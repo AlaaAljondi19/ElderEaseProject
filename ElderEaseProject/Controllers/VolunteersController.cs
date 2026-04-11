@@ -34,7 +34,41 @@ namespace ElderEaseProject.Controllers
         {
             _context.Volunteers.Add(volunteer);
             await _context.SaveChangesAsync();
-            return Ok(volunteer);
+            return CreatedAtAction(nameof(GetVolunteer), new { id = volunteer.Id }, volunteer);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutVolunteer(int id, Volunteer volunteer)
+        {
+            if (id != volunteer.Id) return BadRequest();
+
+            _context.Entry(volunteer).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Volunteers.Any(e => e.Id == id)) return NotFound();
+                else throw;
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVolunteer(int id)
+        {
+            var volunteer = await _context.Volunteers.FindAsync(id);
+            if (volunteer == null) return NotFound();
+
+            _context.Volunteers.Remove(volunteer);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

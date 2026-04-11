@@ -27,7 +27,20 @@ namespace ElderEaseProject.Controllers
         {
             _context.ContactMessages.Add(message);
             await _context.SaveChangesAsync();
-            return Ok(message);
+            return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message == null) return NotFound();
+
+            _context.ContactMessages.Remove(message);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
