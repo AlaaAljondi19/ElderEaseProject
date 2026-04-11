@@ -58,18 +58,21 @@
           Action: POST /api/Contact  أو  /Contact/Send
           ============================================================
         -->
-        <form id="contactForm" onsubmit="submitContact(event)">
+        <form id="contactForm" onsubmit="submitContact(event)"novalidate>
+        
           <!-- @Html.AntiForgeryToken() -->
 
-          <div class="mb-4">
-            <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="cName" name="Name" required placeholder="أدخل اسمك الكامل" />
-          </div>
+            <div class="mb-4">
+                <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="cName" name="Name"  placeholder="أدخل اسمك الكامل" />
+                <small id="cNameError" class="text-danger" style="display:none; font-weight:bold;">* يرجى إدخال اسمك الكامل.</small>
+            </div>
 
-          <div class="mb-4">
-            <label class="form-label">البريد الإلكتروني <span class="text-danger">*</span></label>
-            <input type="email" class="form-control" id="cEmail" name="Email" required placeholder="example@email.com" />
-          </div>
+            <div class="mb-4">
+                <label class="form-label">البريد الإلكتروني <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="cEmail" name="Email"  placeholder="example@email.com" />
+                <small id="cEmailError" class="text-danger" style="display:none; font-weight:bold;">* يرجى إدخال بريد إلكتروني صحيح.</small>
+            </div>
 
           <div class="mb-4">
             <label class="form-label">رقم الهاتف (اختياري)</label>
