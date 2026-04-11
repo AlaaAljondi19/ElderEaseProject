@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElderEase - الخدمات الحكومية</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="assets/css/gov-services.css" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li><a class="nav-link" href="index.html">الرئيسية</a></li>
+        <li><a class="nav-link" href="help-request.html">طلب مساعدة</a></li>
+        <li><a class="nav-link" href="learn.html">تعلم الخدمات</a></li>
+        <li><a class="nav-link" href="volunteers.html">المتطوعون</a></li>
+        <li><a class="nav-link" href="appointments.html">المواعيد</a></li>
+        <li><a class="nav-link active" href="gov-services.html">الخدمات الحكومية</a></li>
+        <li><a class="nav-link" href="organizations.html">المؤسسات</a></li>
+        <li><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+      </ul>
+      <a href="admin.html" class="nav-link btn-admin"><i class="bi bi-shield-lock ms-1"></i> الإدارة</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h2><i class="bi bi-building-fill-gear" style="color:var(--primary)"></i> الخدمات الحكومية</h2>
+    <p>روابط مباشرة لأهم المواقع والخدمات الحكومية الرسمية</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+
+    <div class="info-banner">
+        <i class="bi bi-info-circle-fill"></i>
+        <span>ستنتقل عند الضغط على أي خدمة إلى الموقع الرسمي مباشرة. إذا احتجت مساعدة في استخدام أي موقع، <a href="help-request.html" style="color:var(--primary);font-weight:700;">اطلب مساعدتنا هنا</a>.</span>
+    </div>
+    <div class="info-banner"> ... </div>
+
+    <div class="search-container mb-5">
+        <div class="input-group shadow-sm">
+            <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search" style="color:var(--primary)"></i>
+            </span>
+            <input type="text" id="govSearch" class="form-control border-start-0 py-3"
+                   placeholder="ابحث عن خدمة (مثلاً: صحة، كهرباء، جواز سفر...)"
+                   onkeyup="filterServices()">
+        </div>
+    </div>
+
+    <div class="row g-4" id="servicesGrid">
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.moh.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-hospital-fill"></i></div>
+                <h5>وزارة الصحة</h5>
+                <p>حجز مواعيد طبية والاستفسار عن الخدمات الصحية الحكومية</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.efawateercom.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-receipt-cutoff"></i></div>
+                <h5>eFAWATEERcom</h5>
+                <p>دفع جميع الفواتير الحكومية والخاصة إلكترونياً في مكان واحد</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.moi.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-person-vcard-fill"></i></div>
+                <h5>الأحوال المدنية</h5>
+                <p>تجديد الهوية الوطنية وجواز السفر وطلب الوثائق الرسمية</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.ssc.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-piggy-bank-fill"></i></div>
+                <h5>الضمان الاجتماعي</h5>
+                <p>الاستفسار عن الراتب التقاعدي وخدمات المتقاعدين والمستحقات</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.electricity.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-lightning-charge-fill"></i></div>
+                <h5>شركة الكهرباء</h5>
+                <p>دفع فواتير الكهرباء والاستعلام عن رصيد الحساب والإبلاغ عن الأعطال</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.miyahuna.com.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-droplet-fill"></i></div>
+                <h5>شركة المياه</h5>
+                <p>دفع فواتير المياه والاستعلام والإبلاغ عن المشاكل وطلب الصيانة</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.nhr.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-globe2"></i></div>
+                <h5>بوابة الحكومة الإلكترونية</h5>
+                <p>جميع الخدمات الحكومية الإلكترونية في مكان واحد</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.mts.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-car-front-fill"></i></div>
+                <h5>ترخيص المركبات</h5>
+                <p>تجديد رخصة السير ودفع مخالفات المرور والاستفسار عن الرسوم</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <a href="https://www.gid.gov.jo" target="_blank" class="gov-card">
+                <div class="gov-icon-wrap"><i class="bi bi-file-earmark-text-fill"></i></div>
+                <h5>دائرة الأراضي</h5>
+                <p>الاستفسار عن العقارات ونقل الملكية وخدمات التسجيل العقاري</p>
+                <span class="gov-btn"><i class="bi bi-box-arrow-up-left"></i> زيارة الموقع</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-muted fs-5">هل تحتاج مساعدة في استخدام أي من هذه المواقع؟</p>
+        <a href="help-request.html" style="background:var(--primary);color:#fff;border:none;border-radius:10px;padding:.8rem 2.5rem;font-size:1rem;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+            <i class="bi bi-life-preserver"></i> اطلب مساعدة الآن
+        </a>
+    </div>
+
+</div>
+
+<footer><p>جميع الحقوق محفوظة &copy; 2025 <span>إيلدر إيز</span></p></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

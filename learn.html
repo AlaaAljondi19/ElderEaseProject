@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElderEase - تعلم الخدمات الرقمية</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="assets/css/learn.css" />
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-heart-pulse-fill"></i> إيلدر إيز</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li><a class="nav-link" href="index.html">الرئيسية</a></li>
+        <li><a class="nav-link" href="help-request.html">طلب مساعدة</a></li>
+        <li><a class="nav-link active" href="learn.html">تعلم الخدمات</a></li>
+        <li><a class="nav-link" href="volunteers.html">المتطوعون</a></li>
+        <li><a class="nav-link" href="appointments.html">المواعيد</a></li>
+        <li><a class="nav-link" href="gov-services.html">الخدمات الحكومية</a></li>
+        <li><a class="nav-link" href="organizations.html">المؤسسات</a></li>
+        <li><a class="nav-link" href="contact.html">تواصل معنا</a></li>
+      </ul>
+      <a href="admin.html" class="nav-link btn-admin"><i class="bi bi-shield-lock ms-1"></i> الإدارة</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h2><i class="bi bi-mortarboard" style="color:var(--primary)"></i> تعلم الخدمات الرقمية</h2>
+    <p>شروحات مبسطة خطوة بخطوة - مصممة خصيصاً لك</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="ابحث عن شرح..." oninput="searchLessons()" />
+    <i class="bi bi-search"></i>
+  </div>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" onclick="filterCat(this,'all')">الكل</button>
+    <button class="cat-tab" onclick="filterCat(this,'health')">صحة</button>
+    <button class="cat-tab" onclick="filterCat(this,'bills')">فواتير</button>
+    <button class="cat-tab" onclick="filterCat(this,'apps')">تطبيقات</button>
+    <button class="cat-tab" onclick="filterCat(this,'gov')">حكومية</button>
+  </div>
+
+  <div class="accordion" id="learnAccordion">
+
+    <!-- درس 1 -->
+    <div class="accordion-item" data-cat="health">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#lesson1">
+          <i class="bi bi-calendar2-heart lesson-icon"></i>
+          كيف أحجز موعد طبي أونلاين؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson1" class="accordion-collapse collapse show" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح متصفح الإنترنت على هاتفك أو حاسوبك (مثل Chrome أو Safari أو Firefox)</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">اكتب في شريط البحث اسم المستشفى أو العيادة التي تريد حجز موعد فيها</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">افتح الموقع الرسمي للمستشفى وابحث عن زر "احجز موعدك" أو "Book Appointment"</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">أدخل اسمك ورقم هاتفك وتاريخ الميلاد في الحقول المطلوبة</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">اختر التخصص الطبي الذي تحتاجه (مثل: قلب، عظام، عيون)</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">اختر التاريخ والوقت المناسب لك من التقويم المعروض</div></div>
+          <div class="step-item"><div class="step-num">7</div><div class="step-text">اضغط "تأكيد الحجز" وستصلك رسالة تأكيد على هاتفك فوراً</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> احفظ رسالة التأكيد أو التقطها صورة، ستحتاجها يوم الموعد.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 2 -->
+    <div class="accordion-item" data-cat="bills">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson2">
+          <i class="bi bi-lightning-charge lesson-icon"></i>
+          كيف أدفع فاتورة الكهرباء إلكترونياً؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson2" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح تطبيق البنك على هاتفك أو اذهب لموقع البنك الإلكتروني</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">سجل دخولك بالرقم السري الخاص بك</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">اضغط على "دفع الفواتير" أو "Pay Bills" في القائمة الرئيسية</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">اختر "الكهرباء" أو "شركة الكهرباء" من قائمة مزودي الخدمة</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">أدخل رقم العداد المكتوب على الفاتورة الورقية أمامك</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">ستظهر قيمة الفاتورة، راجعها وتأكد أنها صحيحة</div></div>
+          <div class="step-item"><div class="step-num">7</div><div class="step-text">اضغط "ادفع الآن" وأدخل رمز التأكيد الذي يصل لهاتفك</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> احتفظ برقم الفاتورة ورقم الرصيد كمرجع مستقبلي.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 3 -->
+    <div class="accordion-item" data-cat="apps">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson3">
+          <i class="bi bi-whatsapp lesson-icon"></i>
+          كيف أستخدم تطبيق واتساب للتواصل؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson3" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">على هاتفك: افتح App Store (آيفون) أو Google Play (أندرويد) وابحث عن "WhatsApp"</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">اضغط "تثبيت" أو "Install" لتحميل التطبيق مجاناً</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">افتح التطبيق وأدخل رقم هاتفك الكامل مع رمز البلد (+962 للأردن)</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">ستصلك رسالة نصية برمز مكون من 6 أرقام، أدخله في التطبيق</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">أدخل اسمك وصورتك (اختياري) ثم اضغط "متابعة"</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">لإرسال رسالة: اضغط الأيقونة الخضراء في الأسفل، اختر جهة اتصال، واكتب رسالتك</div></div>
+          <div class="step-item"><div class="step-num">7</div><div class="step-text">اضغط السهم الأخضر بجانب الرسالة لإرسالها</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> يمكنك الضغط على أيقونة الميكروفون لإرسال رسالة صوتية بدلاً من الكتابة!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 4 -->
+    <div class="accordion-item" data-cat="apps">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson4">
+          <i class="bi bi-camera-video lesson-icon"></i>
+          كيف أجري مكالمة فيديو مع العائلة؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson4" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح تطبيق واتساب أو FaceTime (للآيفون) على هاتفك</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">ابحث عن اسم الشخص الذي تريد التحدث معه في قائمة جهات الاتصال</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">افتح المحادثة معه ثم اضغط على أيقونة الكاميرا في أعلى الشاشة</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">اضغط "مكالمة فيديو" وانتظر حتى يرد الطرف الآخر</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">تأكد من أن الكاميرا والميكروفون مفعّلان (لا توجد علامة شطب عليهما)</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">للانتهاء: اضغط الدائرة الحمراء في أسفل الشاشة</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> تأكد من اتصال الانترنت الجيد قبل المكالمة. الاتصال بالواي فاي أفضل من بيانات الهاتف.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 5 -->
+    <div class="accordion-item" data-cat="gov">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson5">
+          <i class="bi bi-person-vcard lesson-icon"></i>
+          كيف أجدد هويتي الوطنية إلكترونياً؟
+          <span class="diff-medium ms-auto me-3">متوسط</span>
+        </button>
+      </h2>
+      <div id="lesson5" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح موقع دائرة الأحوال المدنية الرسمي على الإنترنت</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">اختر "الخدمات الإلكترونية" ثم "تجديد الهوية الوطنية"</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">أدخل رقمك الوطني وتاريخ الميلاد</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">حدد الرسوم إلكترونياً عبر بطاقة الدفع أو eFAWATEERcom</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">احجز موعداً في أقرب مركز للأحوال المدنية لاستلام الهوية</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">احضر في الموعد المحدد ببصمة إصبعك وصورة شخصية حديثة</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> إذا واجهتك صعوبة، اطلب المساعدة من أحد أفراد العائلة أو تواصل مع متطوعينا.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 6 -->
+    <div class="accordion-item" data-cat="bills">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson6">
+          <i class="bi bi-droplet lesson-icon"></i>
+          كيف أدفع فاتورة المياه؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson6" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح موقع eFAWATEERcom أو تطبيق البنك الإلكتروني</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">اختر "دفع فواتير المياه" من قائمة الخدمات</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">أدخل رقم اشتراك المياه المكتوب على فاتورتك الورقية</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">ستظهر قيمة الفاتورة، تحقق منها ثم اضغط "ادفع"</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">أدخل بيانات بطاقتك البنكية أو اختر طريقة الدفع المناسبة</div></div>
+          <div class="step-item"><div class="step-num">6</div><div class="step-text">ستصلك رسالة تأكيد الدفع فوراً احتفظ بها</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> يمكنك دفع جميع الفواتير من مكان واحد عبر تطبيق eFAWATEERcom.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- درس 7 -->
+    <div class="accordion-item" data-cat="apps">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson7">
+          <i class="bi bi-google lesson-icon"></i>
+          كيف أبحث عن معلومة على الإنترنت؟
+          <span class="diff-easy ms-auto me-3">سهل</span>
+        </button>
+      </h2>
+      <div id="lesson7" class="accordion-collapse collapse" data-bs-parent="#learnAccordion">
+        <div class="accordion-body">
+          <div class="step-item"><div class="step-num">1</div><div class="step-text">افتح تطبيق المتصفح على هاتفك (Chrome أو Safari)</div></div>
+          <div class="step-item"><div class="step-num">2</div><div class="step-text">انظر في الأعلى لشريط طويل - هذا هو شريط البحث</div></div>
+          <div class="step-item"><div class="step-num">3</div><div class="step-text">اضغط على الشريط واكتب ما تريد البحث عنه بالعربية</div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-text">اضغط مفتاح "بحث" أو "Enter" على لوحة المفاتيح</div></div>
+          <div class="step-item"><div class="step-num">5</div><div class="step-text">ستظهر قائمة من النتائج، اضغط على الرابط الأول أو الثاني</div></div>
+          <div class="tip-box"><i class="bi bi-lightbulb-fill"></i> <strong>نصيحة:</strong> للبحث الصوتي، اضغط على أيقونة الميكروفون وتكلم بما تريد البحث عنه!</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- accordion -->
+
+  <div class="text-center mt-4">
+    <p class="text-muted">لم تجد ما تحتاجه؟</p>
+    <a href="help-request.html" style="background:var(--primary);color:#fff;border:none;border-radius:10px;padding:.75rem 2rem;font-size:1rem;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+      <i class="bi bi-life-preserver"></i> اطلب مساعدة شخصية
+    </a>
+  </div>
+</div>
+
+<footer><p>جميع الحقوق محفوظة &copy; 2025 <span>إيلدر إيز</span></p></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="assets/js/learn.js"></script>
+</body>
+</html>
