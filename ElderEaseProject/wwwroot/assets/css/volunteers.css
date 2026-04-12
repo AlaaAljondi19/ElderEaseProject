@@ -35,3 +35,9 @@
     .btn-send{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:.75rem 2rem;font-size:1rem;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;}
     footer{background:#2d2d2d;color:#ccc;text-align:center;padding:24px;font-size:.9rem;margin-top:60px;}
     footer span{color:var(--primary);}
+.error-message {
+    color: #ff0000; /* اللون الأحمر */
+    font-size: 12px;
+    margin-top: 5px;
+    display: none; /* مخفي افتراضياً */
+}

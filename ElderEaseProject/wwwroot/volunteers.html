@@ -152,19 +152,21 @@
       <div class="modal-body p-4">
         <div class="alert alert-success d-none" id="volMsgSuccess">تم إرسال رسالتك! سيتواصل معك المتطوع قريباً.</div>
         <!-- اربط بـ: POST /api/VolunteerMessages -->
-        <form id="volContactForm" onsubmit="sendVolMsg(event)">
+        <form id="volContactForm" onsubmit="sendVolMsg(event)"novalidate>
           <input type="hidden" id="volunteerName" name="VolunteerName" />
           <div class="mb-3">
             <label class="form-label">المتطوع</label>
             <input type="text" class="form-control" id="volNameDisplay" readonly style="background:#f8f9fa;" />
           </div>
           <div class="mb-3">
-            <label class="form-label">اسمك <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="SenderName" required placeholder="أدخل اسمك" />
+              <label class="form-label">اسمك <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="SenderName" required placeholder="أدخل اسمك" />
+              <span class="error-message" id="name-error">يرجى إدخال الاسم</span>
           </div>
           <div class="mb-3">
-            <label class="form-label">رقم هاتفك <span class="text-danger">*</span></label>
-            <input type="tel" class="form-control" name="Phone" required placeholder="05xxxxxxxx" />
+              <label class="form-label">رقم هاتفك <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" name="Phone" required placeholder="05xxxxxxxx" />
+              <span class="error-message" id="phone-error">يرجى إدخال رقم الهاتف</span>
           </div>
           <div class="mb-4">
             <label class="form-label">رسالتك <span class="text-danger">*</span></label>
