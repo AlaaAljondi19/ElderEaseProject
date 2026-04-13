@@ -1,4 +1,4 @@
-﻿using ElderEaseProject.Data; // Ensure this points to your DbContext folder
+﻿using ElderEaseProject.Data;
 using ElderEaseProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +13,16 @@ namespace ElderEaseProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        // ADDITION 1: Context variable
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        // ADDITION 2: Constructor to inject the context
-        public AuthController(ApplicationDbContext context)
+        public AuthController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
-        // ADDITION 3: Changed to 'async Task<IActionResult>' and added database logic
         public async Task<IActionResult> Register([FromBody] UserDto model)
         {
             var user = new User
@@ -35,7 +34,7 @@ namespace ElderEaseProject.Controllers
             };
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync(); // ADDITION 4: This saves to SQL
+            await _context.SaveChangesAsync();
 
             return Ok(new { message = "User registered successfully" });
         }
@@ -44,12 +43,25 @@ namespace ElderEaseProject.Controllers
         public IActionResult Login([FromBody] UserDto model)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("SuperSecretKey1234567890123456");
+
+            var jwtKey = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                return StatusCode(500, "JWT Key is not configured properly.");
+            }
+
+            var key = Encoding.UTF8.GetBytes(jwtKey);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.Username) }),
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, model.Username)
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

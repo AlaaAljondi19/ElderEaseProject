@@ -17,5 +17,7 @@ namespace ElderEase_Project.Models
 
         public int UserId { get; set; }
         public User User { get; set; } = null!;
+
+        public string Status { get; set; } = "Pending";
     }
 }

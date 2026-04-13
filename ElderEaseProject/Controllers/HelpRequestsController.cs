@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderEaseProject.Data;
 using ElderEase_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElderEaseProject.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    
     public class HelpRequestsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,14 +24,21 @@ namespace ElderEaseProject.Controllers
             _context = context;
         }
 
-        // GET: api/HelpRequests
+        // GET: api/HelpRequests?status=Pending
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HelpRequest>>> GetHelpRequests()
+        public async Task<ActionResult<IEnumerable<HelpRequest>>> GetHelpRequests([FromQuery] string? status)
         {
-            return await _context.HelpRequests.ToListAsync();
+            var query = _context.HelpRequests.AsQueryable();
+
+            // الفلترة حسب الحالة المطلوبة في الجملة
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(h => h.Status == status);
+            }
+
+            return await query.ToListAsync();
         }
 
-        // GET: api/HelpRequests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<HelpRequest>> GetHelpRequest(int id)
         {
@@ -36,20 +46,18 @@ namespace ElderEaseProject.Controllers
 
             if (helpRequest == null)
             {
-                return NotFound();
+                return NotFound(new { message = "الطلب غير موجود" });
             }
 
             return helpRequest;
         }
 
-        // PUT: api/HelpRequests/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHelpRequest(int id, HelpRequest helpRequest)
         {
             if (id != helpRequest.Id)
             {
-                return BadRequest();
+                return BadRequest(new { message = "بيانات الطلب غير متطابقة" });
             }
 
             _context.Entry(helpRequest).State = EntityState.Modified;
@@ -62,7 +70,7 @@ namespace ElderEaseProject.Controllers
             {
                 if (!HelpRequestExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new { message = "الطلب غير موجود" });
                 }
                 else
                 {
@@ -70,34 +78,37 @@ namespace ElderEaseProject.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(new { message = "تم تحديث الطلب بنجاح" });
         }
 
-        // POST: api/HelpRequests
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<HelpRequest>> PostHelpRequest(HelpRequest helpRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "يرجى التأكد من البيانات" });
+            }
+
             _context.HelpRequests.Add(helpRequest);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetHelpRequest", new { id = helpRequest.Id }, helpRequest);
+            return CreatedAtAction("GetHelpRequest", new { id = helpRequest.Id }, new { message = "تم إرسال طلبك بنجاح", data = helpRequest });
         }
 
-        // DELETE: api/HelpRequests/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHelpRequest(int id)
         {
             var helpRequest = await _context.HelpRequests.FindAsync(id);
             if (helpRequest == null)
             {
-                return NotFound();
+                return NotFound(new { message = "الطلب غير موجود" });
             }
 
             _context.HelpRequests.Remove(helpRequest);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new { message = "تم حذف الطلب بنجاح" });
         }
 
         private bool HelpRequestExists(int id)
