@@ -53,58 +53,67 @@
       Action: POST /api/HelpRequests  أو  /HelpRequest/Create
       ============================================================
     -->
-    <form id="helpForm" onsubmit="submitForm(event)"novalidate>
-      <!-- في ASP.NET: @Html.AntiForgeryToken() -->
+    <form id="helpForm" onsubmit="submitForm(event)" novalidate>
+        <div id="successAlert" class="alert alert-success d-none" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>تم الإرسال!</strong> سيتواصل معك الفريق المختص قريباً.
+        </div>
 
-      <div class="mb-4">
-        <label class="form-label">الاسم (اختياري)</label>
-        <input type="text" class="form-control" id="name" name="Name" placeholder="أدخل اسمك" />
-      </div>
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>عذراً!</strong> حدث خطأ في السيرفر، يرجى المحاولة لاحقاً.
+        </div>
+        <!-- في ASP.NET: @Html.AntiForgeryToken() -->
 
-      <div class="mb-4">
-          <label class="form-label">نوع المشكلة <span class="text-danger">*</span></label>
-          <small id="typeError" class="text-danger" style="display:none; font-weight:bold;">* يرجى اختيار نوع المشكلة لنتمكن من توجيهك.</small>
-          <div class="problem-types">
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'medical')">
-                  <i class="bi bi-hospital"></i> حجز موعد طبي
-              </button>
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'bill')">
-                  <i class="bi bi-receipt"></i> دفع فاتورة
-              </button>
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'app')">
-                  <i class="bi bi-phone"></i> استخدام تطبيق
-              </button>
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'gov')">
-                  <i class="bi bi-building"></i> خدمة حكومية
-              </button>
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'internet')">
-                  <i class="bi bi-wifi"></i> مشكلة انترنت
-              </button>
-              <button type="button" class="problem-type-btn" onclick="selectType(this,'other')">
-                  <i class="bi bi-three-dots"></i> أخرى
-              </button>
-          </div>
-          <!-- حقل مخفي لحفظ القيمة -->
-          <input type="hidden" id="problemType" name="ProblemType" required />
-          <div class="invalid-feedback d-block text-danger small mt-2" id="typeError" style="display:none!important;"></div>
-      </div>
+        <div class="mb-4">
+            <label class="form-label">الاسم (اختياري)</label>
+            <input type="text" class="form-control" id="name" name="Name" placeholder="أدخل اسمك" />
+        </div>
 
-      <div class="mb-4">
-        <label class="form-label">وصف المشكلة <span class="text-danger">*</span></label>
-        <textarea class="form-control" id="description" name="Description" rows="5"
-          placeholder="اشرح مشكلتك بالتفصيل وسنساعدك..." ></textarea>
+        <div class="mb-4">
+            <label class="form-label">نوع المشكلة <span class="text-danger">*</span></label>
+            <small id="typeError" class="text-danger" style="display:none; font-weight:bold;">* يرجى اختيار نوع المشكلة لنتمكن من توجيهك.</small>
+            <div class="problem-types">
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'medical')">
+                    <i class="bi bi-hospital"></i> حجز موعد طبي
+                </button>
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'bill')">
+                    <i class="bi bi-receipt"></i> دفع فاتورة
+                </button>
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'app')">
+                    <i class="bi bi-phone"></i> استخدام تطبيق
+                </button>
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'gov')">
+                    <i class="bi bi-building"></i> خدمة حكومية
+                </button>
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'internet')">
+                    <i class="bi bi-wifi"></i> مشكلة انترنت
+                </button>
+                <button type="button" class="problem-type-btn" onclick="selectType(this,'other')">
+                    <i class="bi bi-three-dots"></i> أخرى
+                </button>
+            </div>
+            <!-- حقل مخفي لحفظ القيمة -->
+            <input type="hidden" id="problemType" name="ProblemType" required />
+            <div class="invalid-feedback d-block text-danger small mt-2" id="typeError" style="display:none!important;"></div>
+        </div>
 
-        <div class="form-text">كلما كان الوصف أوضح، كان بإمكاننا مساعدتك بشكل أفضل.</div>
-      </div>
+        <div class="mb-4">
+            <label class="form-label">وصف المشكلة <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="description" name="Description" rows="5" placeholder="اشرح مشكلتك بالتفصيل وسنساعدك..."></textarea>
+            <span id="descriptionError" class="text-danger" style="display:none; font-weight:bold; font-size: 13px;">* يرجى كتابة وصف للمشكلة.</span>
 
-      <div class="mb-4">
-        <label class="form-label">رقم الهاتف (اختياري - للتواصل المباشر)</label>
-        <input type="tel" class="form-control" id="phone" name="Phone" placeholder="05xxxxxxxx" />
-      </div>
+            <div class="form-text">كلما كان الوصف أوضح، كان بإمكاننا مساعدتك بشكل أفضل.</div>
+        </div>
 
-      <button type="submit" class="btn-submit">
-        <i class="bi bi-send-fill"></i> إرسال الطلب
-      </button>
+        <div class="mb-4">
+            <label class="form-label">رقم الهاتف (اختياري - للتواصل المباشر)</label>
+            <input type="tel" class="form-control" id="phone" name="Phone" placeholder="05xxxxxxxx" />
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <i class="bi bi-send-fill"></i> إرسال الطلب
+        </button>
     </form>
   </div>
 </div>
