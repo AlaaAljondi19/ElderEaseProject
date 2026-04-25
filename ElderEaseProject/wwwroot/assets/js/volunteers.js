@@ -1,14 +1,18 @@
-/* === volunteers.js - النسخة المعتمدة طبقاً لـ Swagger المشروع === */
+/* === volunteers.js - النسخة المعتمدة مع الـ Spinner === */
 const API_VOLUNTEERS = 'https://localhost:7188/api/Volunteers';
-const API_MESSAGES = 'https://localhost:7188/api/VolunteerMessages';
 
-// 1. جلب المتطوعين
+// 1. جلب المتطوعين (السبينر هنا يظهر في وسط الصفحة أثناء تحميل الكروت)
 async function fetchVolunteers(query = '') {
     const grid = document.getElementById('volunteersGrid');
     if (!grid) return;
 
     try {
-        grid.innerHTML = `<div class="col-12 text-center p-5"><div class="spinner-border text-primary"></div><p>جاري التحميل...</p></div>`;
+        // تحسين شكل السبينر المركزي أثناء التحميل
+        grid.innerHTML = `
+            <div class="col-12 text-center p-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3 text-muted fw-bold">جاري تحميل قائمة المتطوعين...</p>
+            </div>`;
 
         const response = await fetch(`${API_VOLUNTEERS}${query}`);
 
@@ -25,13 +29,12 @@ async function fetchVolunteers(query = '') {
     }
 }
 
-// 2. رسم الكروت (الأسماء مطابقة للـ Swagger JSON)
+// 2. رسم الكروت (لم يتم تغيير أي شيء في المنطق أو الأسماء)
 function renderVolunteers(volunteers) {
     const grid = document.getElementById('volunteersGrid');
     grid.innerHTML = '';
 
     volunteers.forEach(vol => {
-        // Specialty في السواجر تبدأ بحرف كبير
         const specialtyKey = (vol.Specialty || "").toLowerCase();
         const icons = { technical: 'bi-cpu', guidance: 'bi-compass', support: 'bi-hand-thumbs-up' };
         const icon = icons[specialtyKey] || 'bi-person-badge';
@@ -44,9 +47,9 @@ function renderVolunteers(volunteers) {
                         <i class="bi ${icon} me-1"></i>${vol.Specialty || "متطوع"}
                     </span>
                     <h5>${vol.FullName}</h5>
-                    <div class="vol-info-item"><i class="bi bi-clock"></i> ${vol.WorkingHours}</div>
+                    <div class="vol-info-item"><i class="bi bi-clock"></i> ${vol.WorkingHours} ساعة</div>
                     <div class="vol-info-item"><i class="bi bi-telephone"></i> ${vol.Phone}</div>
-                    <div class="vol-info-item"><i class="bi bi-star-fill" style="color:#f59e0b"></i> ${vol.Bio}</div>
+                    <div class="vol-info-item"><i class="bi bi-star-fill" style="color:#f59e0b"></i> ${vol.Bio || "لا يوجد وصف"}</div>
                     <button class="btn-contact" onclick="openContactModal('${vol.FullName}')">
                         <i class="bi bi-chat-dots-fill"></i> تواصل مع المتطوع
                     </button>
@@ -55,21 +58,28 @@ function renderVolunteers(volunteers) {
     });
 }
 
-// 3. إرسال الرسالة (مطابقة لـ ContactMessage Schema في السواجر)
+// 3. إرسال الرسالة (إضافة السبينر داخل الزر عند الإرسال)
 window.sendVolMsg = function (e) {
     e.preventDefault();
     const form = e.target;
 
-    // الأسماء هنا يجب أن تطابق الـ Required Fields في السواجر: Name, Email, Subject, MessageContent
+    // تعريف الزر لإضافة السبينر
+    const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('.btn-primary');
+    const originalBtnText = submitBtn.innerHTML;
+
     const payload = {
-        Name: "Alia Bassam", // أو الاسم من حقل الإدخال
-        Email: "alia@example.com", // إجباري حسب السواجر
+        Name: "Alia Bassam",
+        Email: "alia@example.com",
         Subject: `رسالة إلى المتطوع: ${document.getElementById('volunteerName').value}`,
         MessageContent: form.querySelector('[name="MessageContent"]').value,
         SentDate: new Date().toISOString()
     };
 
-    fetch('https://localhost:7188/api/ContactMessages', { // التوجه لـ ContactMessages حسب السواجر
+    // تشغيل السبينر وتعطيل الزر
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> جاري الإرسال...`;
+
+    fetch('https://localhost:7188/api/ContactMessages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -80,10 +90,16 @@ window.sendVolMsg = function (e) {
                 form.reset();
                 setTimeout(() => {
                     bootstrap.Modal.getInstance(document.getElementById('contactVolModal')).hide();
+                    document.getElementById('volSuccess').classList.add('d-none'); // إخفاء الرسالة بعد الإغلاق
                 }, 2000);
             } else {
                 document.getElementById('volError').classList.remove('d-none');
             }
         })
-        .catch(() => document.getElementById('volError').classList.remove('d-none'));
+        .catch(() => document.getElementById('volError').classList.remove('d-none'))
+        .finally(() => {
+            // إعادة الزر لحالته الطبيعية
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        });
 };

@@ -1,13 +1,12 @@
+/* === appointments.js - النسخة المصححة بالكامل === */
 const API_BASE = "https://localhost:7188/api/Appointments";
 const USER_ID = 1;
 const MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-
 let appointmentToDeleteId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchAppointments();
 
-    // ربط زر الحفظ
     const saveBtn = document.getElementById('submitApptBtn');
     if (saveBtn) {
         saveBtn.onclick = (e) => {
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // ربط زر الحذف في المودال الأحمر
     const confirmBtn = document.getElementById('confirmDeleteBtn');
     if (confirmBtn) {
         confirmBtn.onclick = finishDelete;
@@ -26,13 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // 1. جلب المواعيد
 async function fetchAppointments() {
     const list = document.getElementById('appointmentsList');
+    const loadingDiv = document.getElementById('loadingAppts');
+
     try {
+        if (loadingDiv) loadingDiv.style.display = 'block';
+        list.innerHTML = "";
+
         const res = await fetch(`${API_BASE}/User/${USER_ID}`);
         if (res.ok) {
             const data = await res.json();
-            list.innerHTML = ""; // تنظيف القائمة
             data.forEach(app => {
-                // استخدام الحقول كما هي في الـ Swagger حرفياً
                 const dateVal = app.AppointmentDate || app.appointmentDate;
                 appendToUI(app.Id || app.id, app.Title || app.title, app.Status || app.status, dateVal);
             });
@@ -40,27 +41,26 @@ async function fetchAppointments() {
     } catch (e) {
         console.error("السيرفر غير متصل");
     } finally {
-        if (document.getElementById('loadingAppts'))
-            document.getElementById('loadingAppts').style.display = 'none';
+        if (loadingDiv) loadingDiv.style.display = 'none';
         checkEmpty();
     }
 }
 
-// 2. إضافة الموعد (حل مشكلة عدم الظهور الفوري)
+// 2. إضافة الموعد
 async function addAppt() {
     const t = document.getElementById('apptTitle');
     const d = document.getElementById('apptDate');
     const tm = document.getElementById('apptTime');
     const tp = document.getElementById('apptType');
+    const saveBtn = document.getElementById('submitApptBtn');
+    const originalText = saveBtn.innerHTML;
 
-    // التحقق من المدخلات (الرسائل الحمراء)
     document.getElementById('apptTitleError').style.display = t.value.trim() ? "none" : "block";
     document.getElementById('apptDateError').style.display = d.value ? "none" : "block";
     document.getElementById('apptTimeError').style.display = tm.value ? "none" : "block";
 
     if (!t.value.trim() || !d.value || !tm.value) return;
 
-    // دمج التاريخ والوقت في تنسيق ISO للسيرفر
     const fullDateTime = new Date(`${d.value}T${tm.value}`).toISOString();
 
     const payload = {
@@ -68,12 +68,15 @@ async function addAppt() {
         Title: t.value,
         AppointmentDate: fullDateTime,
         Status: tp.value,
-        PatientName: "Alia Bassam", // اسم المستخدم الحالي
+        PatientName: "Alia Bassam",
         Description: "ElderEase Appointment",
         UserId: USER_ID
     };
 
     try {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> جاري الحفظ...`;
+
         const res = await fetch(API_BASE, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -81,22 +84,22 @@ async function addAppt() {
         });
 
         if (res.ok) {
-            // ✅ السر هنا: جلب البيانات من السيرفر مرة ثانية فوراً لتحديث الواجهة
             await fetchAppointments();
-
-            // إغلاق المودال وتصفير الفورم
             const modalInstance = bootstrap.Modal.getInstance(document.getElementById('addApptModal'));
             modalInstance.hide();
             document.getElementById('apptForm').reset();
         } else {
-            alert("السيرفر رفض الحفظ. تأكدي من تشغيل الباكند وتوافق الحقول.");
+            alert("السيرفر رفض الحفظ.");
         }
     } catch (err) {
-        alert("تأكدي من تشغيل مشروع الـ Visual Studio.");
+        alert("تأكدي من تشغيل السيرفر.");
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
     }
-}
+} // <--- هذا القوس الذي كان ينقص غالباً هنا
 
-// 3. بناء الكرت في الصفحة
+// 3. بناء الكرت
 function appendToUI(id, title, status, dateIso) {
     const list = document.getElementById('appointmentsList');
     const dateObj = new Date(dateIso);
@@ -126,7 +129,7 @@ function appendToUI(id, title, status, dateIso) {
     list.insertAdjacentHTML('afterbegin', html);
 }
 
-// 4. الحذف (تفعيل الزر الأحمر)
+// 4. الحذف
 window.openDeleteModal = function (id, title) {
     appointmentToDeleteId = id;
     document.getElementById('apptNameDisplay').innerText = `"${title}"`;
@@ -135,18 +138,25 @@ window.openDeleteModal = function (id, title) {
 
 async function finishDelete() {
     if (!appointmentToDeleteId) return;
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    const originalText = confirmBtn.innerHTML;
+
     try {
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+
         const res = await fetch(`${API_BASE}/${appointmentToDeleteId}`, { method: "DELETE" });
         if (res.ok) {
-            // حذف العنصر من الشاشة فوراً
             const el = document.getElementById(`appt-${appointmentToDeleteId}`);
             if (el) el.remove();
-
             bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
             checkEmpty();
         }
     } catch (err) {
         console.error("خطأ في الحذف");
+    } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = originalText;
     }
 }
 
