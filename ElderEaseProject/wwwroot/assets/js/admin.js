@@ -1,82 +1,130 @@
+const API_BASE = "https://localhost:7188";
+
 // ==========================================
-// ملف admin.js - لوحة تحكم ElderEase
+// 📅 LOAD HELP REQUESTS (طلبات المساعدة)
 // ==========================================
-
-// 1. دالة حفظ إعدادات الموقع وإظهار الرسالة الحمراء
-async function saveGeneralSettings(event) {
-    if (event) {
-        event.preventDefault(); // منع الصفحة من التحديث (الطييران)
-        event.stopPropagation();
-    }
-
-    // جلب البيانات من الحقول (تأكدي أن الـ IDs تطابق الـ HTML عندك)
-    const settings = {
-        siteName: document.getElementById('set-platform-name').value,
-        email: document.getElementById('set-support-email').value,
-        phone: document.getElementById('set-support-phone').value,
-        welcomeMsg: document.getElementById('set-welcome-msg').value,
-        address: document.getElementById('set-address').value
-    };
-
+async function loadAppointments() {
     try {
-        // حفظ البيانات في ذاكرة المتصفح لتطبق على كل الصفحات
-        localStorage.setItem('siteSettings', JSON.stringify(settings));
+        const res = await fetch(`${API_BASE}/api/HelpRequests`);
+        if (!res.ok) throw new Error("Failed to fetch");
 
-        // إظهار التنبيه الأحمر في الأعلى
-        showTopAlert("تم حفظ التعديلات بنجاح وتطبيقها على الموقع ✅");
-    } catch (error) {
-        console.error("خطأ في الحفظ:", error);
+        const data = await res.json();
+        const table = document.getElementById("all-requests-table");
+        if (!table) return;
+
+        table.innerHTML = "";
+        data.forEach(a => {
+            // التعديل: استخدام الأسماء من السواجر (Id, Name, ProblemType, Status)
+            table.innerHTML += `
+                <tr>
+                    <td>${a.Id}</td>
+                    <td>${a.Name || "بدون اسم"}</td>
+                    <td>${a.ProblemType || "طلب عام"}</td>
+                    <td>${a.Description || "-"}</td>
+                    <td>${a.Phone || "-"}</td>
+                    <td>${a.CreatedAt ? new Date(a.CreatedAt).toLocaleDateString() : "-"}</td>
+                    <td><span class="status-badge">${a.Status || "Pending"}</span></td>
+                    <td>
+                        <button class="delete" onclick="deleteAppointment(${a.Id})">حذف</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        if (document.getElementById("requests-count"))
+            document.getElementById("requests-count").innerText = data.length;
+
+    } catch (err) {
+        console.error(err);
+        showTopAlert("خطأ في تحميل الطلبات");
     }
-
-    return false;
 }
 
-// 2. دالة إظهار التنبيه الأحمر (تصميم ثابت وقوي)
-function showTopAlert(message) {
-    const oldAlert = document.querySelector('.top-alert-banner');
-    if (oldAlert) oldAlert.remove();
+// ==========================================
+// 👥 LOAD VOLUNTEERS (المتطوعين)
+// ==========================================
+async function loadVolunteers() {
+    try {
+        const res = await fetch(`${API_BASE}/api/Volunteers`);
+        const data = await res.json();
+        const table = document.getElementById("volunteers-table-body");
+        if (!table) return;
 
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'top-alert-banner';
-
-    // تنسيق CSS مباشرة داخل الجافاسكريبت لضمان الظهور الأحمر
-    alertDiv.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #d9534f;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        font-weight: bold;
-        font-size: 18px;
-        z-index: 999999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    `;
-
-    alertDiv.innerHTML = message;
-    document.body.prepend(alertDiv);
-
-    setTimeout(() => {
-        alertDiv.style.transition = "opacity 0.8s";
-        alertDiv.style.opacity = "0";
-        setTimeout(() => alertDiv.remove(), 800);
-    }, 4000);
+        table.innerHTML = "";
+        data.forEach(v => {
+            // التعديل: FullName و Specialty و WorkingHours
+            table.innerHTML += `
+                <tr>
+                    <td>${v.Id}</td>
+                    <td>${v.FullName}</td>
+                    <td>${v.Specialty || "-"}</td>
+                    <td>${v.Phone || "-"}</td>
+                    <td>${v.WorkingHours || "0"} ساعة</td>
+                    <td><span class="status-badge">Active</span></td>
+                    <td><button class="delete" onclick="deleteVolunteer(${v.Id})">حذف</button></td>
+                </tr>
+            `;
+        });
+        if (document.getElementById("volunteers-count"))
+            document.getElementById("volunteers-count").innerText = data.length;
+    } catch (err) {
+        showTopAlert("خطأ في تحميل المتطوعين");
+    }
 }
 
-// 3. دالة تغيير كلمة المرور (التي عملنا عليها سابقاً)
-async function updatePassword(event) {
-    if (event) event.preventDefault();
-    const currentPass = document.getElementById('current-password').value;
-    const newPass = document.getElementById('new-password').value;
-    const confirmPass = document.getElementById('confirm-password').value;
+// ==========================================
+// 📩 CONTACT MESSAGES (رسائل التواصل)
+// ==========================================
+async function loadMessages() {
+    try {
+        const res = await fetch(`${API_BASE}/api/ContactMessages`);
+        const data = await res.json();
+        const table = document.getElementById("messages-table");
+        if (!table) return;
 
-    if (newPass !== confirmPass) {
-        alert("كلمات المرور الجديدة غير متطابقة!");
-        return;
+        table.innerHTML = "";
+        data.forEach(m => {
+            // التعديل: MessageContent و SentDate
+            table.innerHTML += `
+                <tr>
+                    <td>${m.Id}</td>
+                    <td>${m.Name}</td>
+                    <td>${m.Email}</td>
+                    <td>${m.Subject}</td>
+                    <td>${m.MessageContent}</td>
+                    <td>${m.SentDate ? new Date(m.SentDate).toLocaleDateString() : "-"}</td>
+                    <td><button class="delete" onclick="deleteMessage(${m.Id})">حذف</button></td>
+                </tr>
+            `;
+        });
+        if (document.getElementById("messages-count"))
+            document.getElementById("messages-count").innerText = data.length;
+    } catch (err) {
+        showTopAlert("خطأ في تحميل الرسائل");
     }
+}
 
-    // هنا يوضع كود الـ Fetch الخاص بالسيرفر كما شرحنا سابقاً
-    showTopAlert("تم طلب تغيير كلمة المرور.. جاري المعالجة");
+// ==========================================
+// 🗑️ DELETE FUNCTIONS
+// ==========================================
+async function deleteAppointment(id) {
+    if (!confirm("هل أنت متأكد من حذف هذا الطلب؟")) return;
+    try {
+        const res = await fetch(`${API_BASE}/api/HelpRequests/${id}`, { method: "DELETE" });
+        if (res.ok) {
+            showTopAlert("تم الحذف بنجاح", "success");
+            loadAppointments();
+        }
+    } catch (err) { showTopAlert("خطأ أثناء الحذف"); }
+}
+
+async function deleteVolunteer(id) {
+    if (!confirm("هل تريد حذف هذا المتطوع؟")) return;
+    try {
+        const res = await fetch(`${API_BASE}/api/Volunteers/${id}`, { method: "DELETE" });
+        if (res.ok) {
+            showTopAlert("تم حذف المتطوع", "success");
+            loadVolunteers();
+        }
+    } catch (err) { showTopAlert("فشل الحذف"); }
 }
