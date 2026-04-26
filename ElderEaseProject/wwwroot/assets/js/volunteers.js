@@ -1,13 +1,12 @@
-/* === volunteers.js - النسخة المعتمدة مع الـ Spinner === */
+/* === volunteers.js - نسخة ديناميكية كاملة === */
 const API_VOLUNTEERS = 'https://localhost:7188/api/Volunteers';
 
-// 1. جلب المتطوعين (السبينر هنا يظهر في وسط الصفحة أثناء تحميل الكروت)
+// 1. جلب المتطوعين
 async function fetchVolunteers(query = '') {
     const grid = document.getElementById('volunteersGrid');
     if (!grid) return;
 
     try {
-        // تحسين شكل السبينر المركزي أثناء التحميل
         grid.innerHTML = `
             <div class="col-12 text-center p-5">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
@@ -22,34 +21,42 @@ async function fetchVolunteers(query = '') {
         }
 
         if (!response.ok) throw new Error("Server Error");
+
         const data = await response.json();
+
+        if (data.length === 0) {
+            grid.innerHTML = '<p class="text-center w-100 text-muted p-5">لا يوجد متطوعون حالياً.</p>';
+            return;
+        }
+
         renderVolunteers(data);
+
     } catch (e) {
-        grid.innerHTML = '<p class="text-center w-100 text-muted p-5">فشل الاتصال بالسيرفر.</p>';
+        grid.innerHTML = '<p class="text-center w-100 text-muted p-5">تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً.</p>';
     }
 }
 
-// 2. رسم الكروت (لم يتم تغيير أي شيء في المنطق أو الأسماء)
+// 2. رسم الكروت من الـ API
 function renderVolunteers(volunteers) {
     const grid = document.getElementById('volunteersGrid');
     grid.innerHTML = '';
 
     volunteers.forEach(vol => {
-        const specialtyKey = (vol.Specialty || "").toLowerCase();
-        const icons = { technical: 'bi-cpu', guidance: 'bi-compass', support: 'bi-hand-thumbs-up' };
+        const specialtyKey = (vol.Specialization || "").toLowerCase();
+        const icons = { technical: 'bi-cpu', guidance: 'bi-compass', general: 'bi-hand-thumbs-up' };
         const icon = icons[specialtyKey] || 'bi-person-badge';
 
         grid.innerHTML += `
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4" data-specialty="${specialtyKey}">
                 <div class="vol-card">
                     <div class="vol-avatar"><i class="bi bi-person-fill"></i></div>
                     <span class="specialty-badge sp-${specialtyKey}">
-                        <i class="bi ${icon} me-1"></i>${vol.Specialty || "متطوع"}
+                        <i class="bi ${icon} me-1"></i>${vol.Specialization || "متطوع"}
                     </span>
                     <h5>${vol.FullName}</h5>
-                    <div class="vol-info-item"><i class="bi bi-clock"></i> ${vol.WorkingHours} ساعة</div>
-                    <div class="vol-info-item"><i class="bi bi-telephone"></i> ${vol.Phone}</div>
-                    <div class="vol-info-item"><i class="bi bi-star-fill" style="color:#f59e0b"></i> ${vol.Bio || "لا يوجد وصف"}</div>
+                    <div class="vol-info-item"><i class="bi bi-clock"></i> ${vol.AvailableHoursPerWeek || ''} ساعة أسبوعياً</div>
+                    <div class="vol-info-item"><i class="bi bi-telephone"></i> ${vol.PhoneNumber || 'غير متوفر'}</div>
+                    <div class="vol-info-item"><i class="bi bi-star-fill" style="color:#f59e0b"></i> ${vol.ExperienceSummary || "لا يوجد وصف"}</div>
                     <button class="btn-contact" onclick="openContactModal('${vol.FullName}')">
                         <i class="bi bi-chat-dots-fill"></i> تواصل مع المتطوع
                     </button>
@@ -58,24 +65,45 @@ function renderVolunteers(volunteers) {
     });
 }
 
-// 3. إرسال الرسالة (إضافة السبينر داخل الزر عند الإرسال)
+// 3. فلترة المتطوعين
+function filterVol(btn, specialty) {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (specialty === 'all') {
+        fetchVolunteers();
+    } else {
+        fetchVolunteers(`?specialty=${specialty}`);
+    }
+}
+
+// 4. فتح الـ Modal
+function openContactModal(name) {
+    document.getElementById('volunteerName').value = name;
+    document.getElementById('volNameDisplay').value = name;
+    document.getElementById('volSuccess').classList.add('d-none');
+    document.getElementById('volError').classList.add('d-none');
+
+    const modal = new bootstrap.Modal(document.getElementById('contactVolModal'));
+    modal.show();
+}
+
+// 5. إرسال الرسالة
 window.sendVolMsg = function (e) {
     e.preventDefault();
     const form = e.target;
 
-    // تعريف الزر لإضافة السبينر
-    const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('.btn-primary');
+    const submitBtn = form.querySelector('.btn-send');
     const originalBtnText = submitBtn.innerHTML;
 
     const payload = {
-        Name: "Alia Bassam",
-        Email: "alia@example.com",
+        Name: form.querySelector('[name="SenderName"]').value,
+        Email: "volunteer@elderease.com",
         Subject: `رسالة إلى المتطوع: ${document.getElementById('volunteerName').value}`,
-        MessageContent: form.querySelector('[name="MessageContent"]').value,
+        MessageContent: form.querySelector('[name="Message"]').value,
         SentDate: new Date().toISOString()
     };
 
-    // تشغيل السبينر وتعطيل الزر
     submitBtn.disabled = true;
     submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> جاري الإرسال...`;
 
@@ -87,19 +115,26 @@ window.sendVolMsg = function (e) {
         .then(res => {
             if (res.ok) {
                 document.getElementById('volSuccess').classList.remove('d-none');
+                document.getElementById('volError').classList.add('d-none');
                 form.reset();
                 setTimeout(() => {
                     bootstrap.Modal.getInstance(document.getElementById('contactVolModal')).hide();
-                    document.getElementById('volSuccess').classList.add('d-none'); // إخفاء الرسالة بعد الإغلاق
+                    document.getElementById('volSuccess').classList.add('d-none');
                 }, 2000);
             } else {
+                document.getElementById('volSuccess').classList.add('d-none');
                 document.getElementById('volError').classList.remove('d-none');
             }
         })
-        .catch(() => document.getElementById('volError').classList.remove('d-none'))
+        .catch(() => {
+            document.getElementById('volSuccess').classList.add('d-none');
+            document.getElementById('volError').classList.remove('d-none');
+        })
         .finally(() => {
-            // إعادة الزر لحالته الطبيعية
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
         });
 };
+
+// 6. تشغيل جلب البيانات عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => fetchVolunteers());

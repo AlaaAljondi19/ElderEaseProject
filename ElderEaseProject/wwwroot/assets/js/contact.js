@@ -95,12 +95,56 @@ async function submitContact(e) {
 function showSuccess() {
     const box = document.getElementById('successBox');
     if (box) {
-        box.style.display = "flex";
-        document.getElementById('contactForm').reset();
+        box.style.display = "flex"; // إظهار الرسالة الخضراء
+        document.getElementById('contactForm').reset(); // تفريغ الحقول
+
+        // التمرير لأعلى الصفحة لرؤية رسالة النجاح
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
+        // إخفاء الرسالة تلقائياً بعد 6 ثوانٍ
         setTimeout(() => {
             box.style.display = "none";
-        }, 8000);
+        }, 6000);
+    }
+}
+ async function handleContactSubmit(e) {
+    e.preventDefault(); // منع الصفحة من التحديث
+
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+
+    // تجميع البيانات من الحقول
+    const payload = {
+        Name: document.querySelector('input[placeholder*="الاسم"]').value,
+        Email: document.querySelector('input[type="email"]').value,
+        Subject: document.querySelector('input[placeholder*="موضوع"]').value,
+        MessageContent: document.querySelector('textarea').value,
+        SentDate: new Date().toISOString()
+    };
+
+    try {
+        // تغيير حالة الزر أثناء الإرسال
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `جاري الإرسال...`;
+
+        const res = await fetch(`${API_BASE}/api/ContactMessages`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            // رسالة النجاح التي طلبتِها
+            alert("✓ تم إرسال رسالتك بنجاح! شكرًا لتواصلك معنا.");
+            e.target.reset(); // تفريغ الحقول
+        } else {
+            alert("عذراً، حدث خطأ أثناء الإرسال. يرجى المحاولة لاحقاً.");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("تعذر الاتصال بالسيرفر، تأكد من تشغيل الـ API.");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
     }
 }

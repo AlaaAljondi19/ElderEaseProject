@@ -58,48 +58,40 @@
           Action: POST /api/Contact  أو  /Contact/Send
           ============================================================
         -->
-        <form id="contactForm" onsubmit="submitContact(event)"novalidate>
-        
-          <!-- @Html.AntiForgeryToken() -->
+        <form id="contactForm" onsubmit="submitContact(event)" novalidate>
 
             <div class="mb-4">
                 <label class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="cName" name="Name"  placeholder="أدخل اسمك الكامل" />
+                <input type="text" class="form-control" id="cName" name="Name" placeholder="أدخل اسمك الكامل" />
                 <small id="cNameError" class="text-danger" style="display:none; font-weight:bold;">* يرجى إدخال اسمك الكامل.</small>
             </div>
 
             <div class="mb-4">
                 <label class="form-label">البريد الإلكتروني <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" id="cEmail" name="Email"  placeholder="example@email.com" />
+                <input type="email" class="form-control" id="cEmail" name="Email" placeholder="example@email.com" />
                 <small id="cEmailError" class="text-danger" style="display:none; font-weight:bold;">* يرجى إدخال بريد إلكتروني صحيح.</small>
             </div>
 
-          <div class="mb-4">
-            <label class="form-label">رقم الهاتف (اختياري)</label>
-            <input type="tel" class="form-control" id="cPhone" name="Phone" placeholder="05xxxxxxxx" />
-          </div>
+            <div class="mb-4">
+                <label class="form-label">موضوع الرسالة</label>
+                <select class="form-control" id="cSubject" name="Subject">
+                    <option value="">-- اختر الموضوع --</option>
+                    <option value="help">طلب مساعدة</option>
+                    <option value="volunteer">الانضمام كمتطوع</option>
+                    <option value="suggestion">اقتراح أو تحسين</option>
+                    <option value="other">أخرى</option>
+                </select>
+            </div>
 
-          <div class="mb-4">
-            <label class="form-label">موضوع الرسالة</label>
-            <select class="form-control" id="cSubject" name="Subject">
-              <option value="">-- اختر الموضوع --</option>
-              <option value="help">طلب مساعدة</option>
-              <option value="volunteer">الانضمام كمتطوع</option>
-              <option value="suggestion">اقتراح أو تحسين</option>
-              <option value="complaint">شكوى</option>
-              <option value="other">أخرى</option>
-            </select>
-          </div>
+            <div class="mb-4">
+                <label class="form-label">الرسالة <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="cMessage" name="Message" rows="5" placeholder="اكتب رسالتك هنا..."></textarea>
+                <small id="cMessageError" class="text-danger" style="display:none; font-weight:bold;">* يرجى كتابة محتوى الرسالة.</small>
+            </div>
 
-          <div class="mb-4">
-            <label class="form-label">الرسالة <span class="text-danger">*</span></label>
-            <textarea class="form-control" id="cMessage" name="Message" rows="5" required
-              placeholder="اكتب رسالتك هنا وسنرد عليك في أقرب وقت..."></textarea>
-          </div>
-
-          <button type="submit" class="btn-submit">
-            <i class="bi bi-send-fill"></i> إرسال الرسالة
-          </button>
+            <button type="submit" class="btn-primary w-100 py-3 shadow-sm" style="border-radius: 12px; font-weight: 700;">
+                <i class="bi bi-send-fill me-2"></i> إرسال الرسالة
+            </button>
         </form>
       </div>
     </div>

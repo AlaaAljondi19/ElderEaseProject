@@ -59,7 +59,7 @@ function renderOrgs(orgs) {
                         <p class="text-primary small mb-2">${org.ActivityType}</p>
                         <p class="text-muted small" style="min-height: 40px;">${org.Description || 'لا يوجد وصف متاح'}</p>
                         <div class="mb-3 border-top pt-2">
-                            <span class="d-block small"><i class="bi bi-geo-alt text-danger"></i> ${org.City} - ${org.FullAddress || ''}</span>
+                   <span class="d-block small"><i class="bi bi-geo-alt text-danger"></i> ${org.City}
                             <span class="d-block small mt-1"><i class="bi bi-envelope text-success"></i> ${org.ContactEmail || 'لا يوجد إيميل'}</span>
                         </div>
                         <a href="mailto:${org.ContactEmail}" class="btn btn-outline-primary w-100 rounded-pill mt-2">تواصل مع المؤسسة</a>

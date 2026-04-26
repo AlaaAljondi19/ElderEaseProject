@@ -33,3 +33,26 @@
     .social-link:hover{background:rgba(255,255,255,.3);color:#fff;}
     footer{background:#2d2d2d;color:#ccc;text-align:center;padding:24px;font-size:.9rem;margin-top:60px;}
     footer span{color:var(--primary);}
+.btn-primary {
+    background-color: #A06B4C !important; /* لون الهوية الخاص بكِ */
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #8a5a3e !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+.alert-success-box {
+    display: none; /* مخفي افتراضياً ويظهر عند النجاح */
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 15px;
+    border-right: 5px solid #198754;
+}

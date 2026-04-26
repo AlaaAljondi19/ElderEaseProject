@@ -29,3 +29,7 @@
     footer { background:#2d2d2d; color:#ccc; text-align:center; padding:24px; font-size:.9rem; margin-top:60px; }
     footer span { color:var(--primary); }
     @media(max-width:576px) { .problem-types { grid-template-columns:1fr; } .form-card { padding:1.5rem; } }
+.selected {
+    background-color: #8b5e3c !important; /* لون التحديد */
+    color: white !important;
+}
