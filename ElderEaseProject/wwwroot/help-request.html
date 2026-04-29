@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلب مساعدة - إيلدر إيز</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/help-request.css">
 </head>
 <body>
 
@@ -47,62 +45,67 @@
         </div>
     </div>
 
-    <div class="form-card">
-        <div id="successAlert" class="alert alert-success d-none text-center"></div>
-        <div id="errorAlert" class="alert alert-danger d-none text-center"></div>
+    <div class="container pb-5">
+        <div class="form-card">
 
-        <form id="helpForm" onsubmit="submitForm(event)">
-            <div class="mb-4">
-                <label class="form-label">الاسم (اختياري)</label>
-                <input type="text" class="form-control" id="name" placeholder="أدخل اسمك">
-            </div>
+            <div id="successAlert" class="alert d-none text-center" role="alert"></div>
+            <div id="errorAlert" class="alert alert-danger d-none text-center" role="alert"></div>
 
-            <div class="mb-4">
-                <label class="form-label">نوع المشكلة <span class="text-danger">*</span></label>
+            <form id="helpForm" onsubmit="submitForm(event)" novalidate>
 
-                <div id="typeError" class="text-danger" style="display:none; font-weight:bold; font-size:14px; margin-bottom:10px;">
-                    * يرجى اختيار نوع المشكلة.
+                <div class="mb-4">
+                    <label class="form-label">الاسم (اختياري)</label>
+                    <input type="text" class="form-control" id="name" placeholder="أدخل اسمك">
                 </div>
 
-                <div class="problem-types">
-                    <button type="button" class="problem-type-btn" onclick="selectType(this, 'medical')">
-                        <i class="bi bi-hospital"></i> حجز موعد طبي
-                    </button>
-                    <button type="button" class="problem-type-btn" onclick="selectType(this, 'bill')">
-                        <i class="bi bi-receipt"></i> دفع فاتورة
-                    </button>
-                    <button type="button" class="problem-type-btn" onclick="selectType(this, 'app')">
-                        <i class="bi bi-phone"></i> استخدام تطبيق
-                    </button>
-                    <button type="button" class="problem-type-btn" onclick="selectType(this, 'other')">
-                        <i class="bi bi-three-dots"></i> أخرى
-                    </button>
+                <div class="mb-4">
+                    <label class="form-label">نوع المشكلة <span class="text-danger">*</span></label>
+                    <div id="typeError" class="text-danger" style="display:none; font-weight:bold; font-size:14px; margin-bottom:10px;">
+                        * يرجى اختيار نوع المشكلة.
+                    </div>
+                    <div class="problem-types">
+                        <button type="button" class="problem-type-btn" onclick="selectType(this, 'medical')">
+                            <i class="bi bi-hospital"></i> حجز موعد طبي
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this, 'bill')">
+                            <i class="bi bi-receipt"></i> دفع فاتورة
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this, 'app')">
+                            <i class="bi bi-phone"></i> استخدام تطبيق
+                        </button>
+                        <button type="button" class="problem-type-btn" onclick="selectType(this, 'other')">
+                            <i class="bi bi-three-dots"></i> أخرى
+                        </button>
+                    </div>
+                    <input type="hidden" id="problemType" value="">
                 </div>
-                <input type="hidden" id="problemType" value="">
-            </div>
 
-            <div class="mb-4">
-                <label class="form-label">وصف المشكلة <span class="text-danger">*</span></label>
-                <textarea class="form-control" id="description" rows="5" placeholder="اشرح مشكلتك بالتفصيل..."></textarea>
-                <div id="descriptionError" class="text-danger" style="display:none; font-weight:bold; font-size:14px; margin-top:5px;">
-                    * يرجى كتابة وصف للمشكلة.
+                <div class="mb-4">
+                    <label class="form-label">وصف المشكلة <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" rows="5"
+                              placeholder="اشرح مشكلتك بالتفصيل..."></textarea>
+                    <div id="descriptionError" class="text-danger"
+                         style="display:none; font-weight:bold; font-size:14px; margin-top:5px;">
+                        * يرجى كتابة وصف للمشكلة.
+                    </div>
                 </div>
-            </div>
 
-            <div class="mb-4">
-                <label class="form-label">رقم الهاتف (اختياري)</label>
-                <input type="tel" class="form-control" id="phone" placeholder="05xxxxxxxx">
-            </div>
+                <div class="mb-4">
+                    <label class="form-label">رقم الهاتف (اختياري)</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="05xxxxxxxx">
+                </div>
 
-            <button type="submit" id="submitBtnText" class="btn btn-primary w-100 py-2">إرسال الطلب</button>
-        </form>
+                <button type="submit" id="submitBtnText" class="btn-submit w-100">
+                    <i class="bi bi-send-fill ms-2"></i> إرسال الطلب
+                </button>
+
+            </form>
+        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <footer><p>جميع الحقوق محفوظة &copy; 2026 <span>إيلدر إيز</span></p></footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/help-request.js"></script>
-    <link rel="stylesheet" href="assets/css/help-request.css">
 </body>
 </html>
